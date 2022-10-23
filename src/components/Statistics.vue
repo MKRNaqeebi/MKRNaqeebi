@@ -10,8 +10,7 @@ defineProps({
 <section class="text-gray-600 body-font">
   <div class="container px-5 py-24 mx-auto">
     <div class="flex flex-col text-center w-full mb-20">
-      <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">Master Cleanse Reliac Heirloom</h1>
-      <p class="lg:w-2/3 mx-auto leading-relaxed text-base">Whatever cardigan tote bag tumblr hexagon brooklyn asymmetrical gentrify, subway tile poke farm-to-table. Franzen you probably haven't heard of them man bun deep jianbing selfies heirloom prism food truck ugh squid celiac humblebrag.</p>
+      <h1 class="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">FACTS & FIGURES</h1>
     </div>
     <div class="flex flex-wrap -m-4 text-center">
       <div class="p-4 md:w-1/4 sm:w-1/2 w-full">
@@ -21,7 +20,7 @@ defineProps({
             <path d="M20.88 18.09A5 5 0 0018 9h-1.26A8 8 0 103 16.29"></path>
           </svg>
           <h2 class="title-font font-medium text-3xl text-gray-900">2.7K</h2>
-          <p class="leading-relaxed">Downloads</p>
+          <p class="leading-relaxed">Satisfied Customers</p>
         </div>
       </div>
       <div class="p-4 md:w-1/4 sm:w-1/2 w-full">
@@ -32,7 +31,7 @@ defineProps({
             <path d="M23 21v-2a4 4 0 00-3-3.87m-4-12a4 4 0 010 7.75"></path>
           </svg>
           <h2 class="title-font font-medium text-3xl text-gray-900">1.3K</h2>
-          <p class="leading-relaxed">Users</p>
+          <p class="leading-relaxed">Projects</p>
         </div>
       </div>
       <div class="p-4 md:w-1/4 sm:w-1/2 w-full">
@@ -42,7 +41,7 @@ defineProps({
             <path d="M21 19a2 2 0 01-2 2h-1a2 2 0 01-2-2v-3a2 2 0 012-2h3zM3 19a2 2 0 002 2h1a2 2 0 002-2v-3a2 2 0 00-2-2H3z"></path>
           </svg>
           <h2 class="title-font font-medium text-3xl text-gray-900">74</h2>
-          <p class="leading-relaxed">Files</p>
+          <p class="leading-relaxed">Motivated Employees</p>
         </div>
       </div>
       <div class="p-4 md:w-1/4 sm:w-1/2 w-full">

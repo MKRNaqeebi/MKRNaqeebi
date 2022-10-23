@@ -6,7 +6,7 @@ import Footer from './components/Footer.vue';
 import Hero from './components/Hero.vue';
 // import About from './components/About.vue';
 import Statistics from './components/Statistics.vue';
-import Services from './components/Services.vue';
+import Blogs from './components/Blogs.vue';
 import Projects from './components/Projects.vue';
 import Contact from './components/Contact.vue';
 import Testimonials from './components/Testimonials.vue';
@@ -19,10 +19,10 @@ import Testimonials from './components/Testimonials.vue';
   <Hero />
   <!-- <About /> -->
   <Statistics />
-  <Services />
+  <Projects />
   <Testimonials />
   <!-- <Cta /> -->
-  <Projects />
+  <Blogs />
   <Contact />
   <Footer />
 </template>
