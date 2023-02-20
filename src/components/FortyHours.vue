@@ -3,6 +3,12 @@
     <div class="forty-hours">
       <div class="forty-hours__header">
         <h3 class="forty-hours__title">Forty Hours</h3>
+        <input
+          type="text"
+          placeholder="organization"
+          v-model="organization"
+          @keyup.enter="fetchIssues"
+        />
         <ul>
           <li v-for="(hour, assignee) in hours" :key="assignee">
             {{ assignee }}: current: {{ hour.current }} and previous:
@@ -23,6 +29,8 @@ export default {
   data() {
     return {
       hours: {},
+      repositories: [],
+      organization: "",
     };
   },
   mounted() {
@@ -44,6 +52,7 @@ export default {
       return startingDay;
     },
     formateIssue(issues) {
+      console.log("isse", issues);
       issues.forEach((issue) => {
         if (issue.labels.length < 1) return;
         // check if issue is closed before last Monday
@@ -86,28 +95,49 @@ export default {
         });
       });
     },
-    fetchIssues() {
+    allI(repos) {
       const startingDay = this.getStatingMonday();
       var lastDay = new Date(startingDay);
       lastDay.setDate(lastDay.getDate() - 7);
       lastDay = lastDay.toISOString().split("T")[0];
-      let nextPage = true;
-      let page = 1;
-      while (nextPage) {
+      console.log("date", startingDay);
+      repos.forEach((repo) => {
         axios({
           method: "get",
-          url: `https://api.github.com/issues?state=closed&page=${page}&per_page=100&q=type:issue+user:CoalAI+archived:false+closed:>${startingDay}`,
+          url: `https://api.github.com/repos/${repo.full_name}/issues?state=open+closed:>${startingDay}`,
           auth: {
             username: this.username,
             password: this.password,
           },
         })
           .then((response) => {
+            //console.log("res", response.data);
+            this.formateIssue(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
+    },
+    fetchIssues() {
+      let nextPage = true;
+      let page = 1;
+      while (nextPage) {
+        axios({
+          method: "get",
+          url: `https://api.github.com/orgs/${this.organization}/repos?&page=${page}&per_page=100`,
+          auth: {
+            username: this.username,
+            password: this.password,
+          },
+        })
+          .then((response) => {
+            this.allI(response.data);
             if (response.data.length < 1) {
               nextPage = false;
               return;
             }
-            this.formateIssue(response.data);
+            //this.formate(response.data);
           })
           .catch((error) => {
             nextPage = false;
