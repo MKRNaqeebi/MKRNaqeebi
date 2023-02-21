@@ -100,11 +100,10 @@ export default {
       var lastDay = new Date(startingDay);
       lastDay.setDate(lastDay.getDate() - 7);
       lastDay = lastDay.toISOString().split("T")[0];
-      console.log("date", startingDay);
       repos.forEach((repo) => {
         axios({
           method: "get",
-          url: `https://api.github.com/repos/${repo.full_name}/issues?state=open+closed:>${startingDay}`,
+          url: `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived:false+closed=${startingDay}`,
           auth: {
             username: this.username,
             password: this.password,
@@ -120,6 +119,7 @@ export default {
       });
     },
     fetchIssues() {
+      console.log("CoalAI", this.organization);
       let nextPage = true;
       let page = 1;
       while (nextPage) {
