@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import FortyHours from "@/components/FortyHours.vue";
+import FortyHours from "../components/FortyHours.vue";
 
 export default {
   name: "HomeView",
