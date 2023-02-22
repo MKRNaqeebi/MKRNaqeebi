@@ -114,7 +114,7 @@ export default {
         });
       });
     },
-    AllIssues(repos) {
+    allIssues(repos) {
       const startingDay = this.getStatingMonday();
       var lastDay = new Date(startingDay);
       lastDay.setDate(lastDay.getDate() - 7);
@@ -129,7 +129,6 @@ export default {
           },
         })
           .then((response) => {
-            //console.log("res", response.data);
             this.formateIssue(response.data);
           })
           .catch((error) => {
@@ -137,7 +136,7 @@ export default {
           });
       });
     },
-    AllRepo(repos) {
+    allRepo(repos) {
       repos.forEach((repo) => {
         this.repositories.push(repo.full_name);
       });
@@ -155,8 +154,8 @@ export default {
           },
         })
           .then((response) => {
-            this.AllIssues(response.data);
-            this.AllRepo(response.data);
+            this.allIssues(response.data);
+            this.allRepo(response.data);
             if (response.data.length < 1) {
               nextPage = false;
               return;
