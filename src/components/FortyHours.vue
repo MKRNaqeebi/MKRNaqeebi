@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import GanttChart from "@/components/GanttChart.vue";
+import GanttChart from "../components/GanttChart.vue";
 import axios from "axios";
 export default {
   name: "FORTY",
