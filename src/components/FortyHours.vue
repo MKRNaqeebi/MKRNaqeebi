@@ -18,7 +18,7 @@
         </ul>
       </div>
       <div id="vue-instance" class="form-group">
-        <select class="form-control" @change="changeCountry($event)">
+        <select class="form-control" @change="changeRepo($event)">
           <option value="" selected disabled>Please Select</option>
           <option v-for="(repo, index) in repositories" :key="index">
             {{ repo }}
@@ -54,7 +54,7 @@ export default {
     this.fetchIssues();
   },
   methods: {
-    changeCountry(event) {
+    changeRepo(event) {
       this.repo = event.target.value;
     },
     getPreviousMonday() {
