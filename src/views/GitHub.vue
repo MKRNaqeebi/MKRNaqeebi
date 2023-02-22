@@ -15,13 +15,6 @@
           v-model="password"
           @keyup.enter="fetchIssues"
         />
-        <input
-          type="text"
-          placeholder="repository"
-          v-model="repository"
-          @keyup.enter="fetchIssues"
-        />
-        <button @click="fetchIssues">Fetch</button>
       </div>
     </div>
   </div>
@@ -30,27 +23,33 @@
     :username="username"
     :password="password"
   />
-  <GanttChart
-    v-if="username && password && repository && fetch"
-    :username="username"
-    :password="password"
-    :repository="repository"
-  />
 </template>
 
 <script>
-import GanttChart from "../components/GanttChart.vue";
 import FortyHours from "../components/FortyHours.vue";
 
 export default {
   name: "HomeView",
-  components: { GanttChart, FortyHours },
+  components: { FortyHours },
   data() {
     return {
       username: "",
       password: "",
-      repository: "",
       fetch: false,
+      assignees: [
+        "MKRNaqeebi",
+        "usama2762",
+        "1abdurRehman",
+        "ahsan-coaldev",
+        "aishatasaduq",
+        "AliHanifdev1",
+        "ammarhaider001",
+        "hamza-coaldev",
+        "LaiqaRafiq",
+        "NajamBilalDev",
+        "noumandev11",
+        "RehmanCoaldev",
+      ],
     };
   },
   methods: {

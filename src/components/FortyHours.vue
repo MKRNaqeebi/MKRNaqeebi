@@ -3,32 +3,60 @@
     <div class="forty-hours">
       <div class="forty-hours__header">
         <h3 class="forty-hours__title">Forty Hours</h3>
+        <input
+          type="text"
+          placeholder="organization"
+          v-model="organization"
+          @keyup.enter="fetchIssues"
+        />
+        <button @click="fetchIssues">Fetch</button>
         <ul>
-          <li v-for="(hour, assignee) in hours" :key="assignee">
+          <li v-for="(hour, assignee) in hours" v-bind:key="assignee">
             {{ assignee }}: current: {{ hour.current }} and previous:
             {{ hour.previous }} hours
           </li>
         </ul>
       </div>
+      <div id="vue-instance" class="form-group">
+        <select class="form-control" @change="changeRepo($event)">
+          <option value="" selected disabled>Please Select</option>
+          <option v-for="(repo, index) in repositories" :key="index">
+            {{ repo }}
+          </option>
+        </select>
+      </div>
     </div>
   </div>
+  <GanttChart
+    v-if="username && password && repo"
+    :username="username"
+    :password="password"
+    :repository="repo"
+  />
 </template>
 
 <script>
+import GanttChart from "../components/GanttChart.vue";
 import axios from "axios";
-
 export default {
-  name: "GanttChart",
+  name: "FORTY",
+  components: { GanttChart },
   props: ["username", "password"],
   data() {
     return {
       hours: {},
+      repositories: [],
+      repo: "",
+      organization: "",
     };
   },
   mounted() {
     this.fetchIssues();
   },
   methods: {
+    changeRepo(event) {
+      this.repo = event.target.value;
+    },
     getPreviousMonday() {
       var prevMonday = new Date();
       prevMonday.setDate(
@@ -86,28 +114,52 @@ export default {
         });
       });
     },
-    fetchIssues() {
+    allIssues(repos) {
       const startingDay = this.getStatingMonday();
       var lastDay = new Date(startingDay);
       lastDay.setDate(lastDay.getDate() - 7);
       lastDay = lastDay.toISOString().split("T")[0];
-      let nextPage = true;
-      let page = 1;
-      while (nextPage) {
+      repos.forEach((repo) => {
         axios({
           method: "get",
-          url: `https://api.github.com/issues?state=closed&page=${page}&per_page=100&q=type:issue+user:CoalAI+archived:false+closed:>${startingDay}`,
+          url: `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived:false+closed=${startingDay}`,
           auth: {
             username: this.username,
             password: this.password,
           },
         })
           .then((response) => {
+            this.formateIssue(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
+    },
+    allRepo(repos) {
+      repos.forEach((repo) => {
+        this.repositories.push(repo.full_name);
+      });
+    },
+    fetchIssues() {
+      let nextPage = true;
+      let page = 1;
+      while (nextPage) {
+        axios({
+          method: "get",
+          url: `https://api.github.com/orgs/${this.organization}/repos?&page=${page}&per_page=100`,
+          auth: {
+            username: this.username,
+            password: this.password,
+          },
+        })
+          .then((response) => {
+            this.allIssues(response.data);
+            this.allRepo(response.data);
             if (response.data.length < 1) {
               nextPage = false;
               return;
             }
-            this.formateIssue(response.data);
           })
           .catch((error) => {
             nextPage = false;
