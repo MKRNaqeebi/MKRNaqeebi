@@ -9,27 +9,44 @@
           v-model="organization"
           @keyup.enter="fetchIssues"
         />
+        <button @click="fetchIssues">Fetch</button>
         <ul>
-          <li v-for="(hour, assignee) in hours" :key="assignee">
+          <li v-for="(hour, assignee) in hours" v-bind:key="assignee">
             {{ assignee }}: current: {{ hour.current }} and previous:
             {{ hour.previous }} hours
           </li>
         </ul>
       </div>
+      <div id="vue-instance" class="form-group">
+        <select class="form-control" @change="changeCountry($event)">
+          <option value="" selected disabled>Please Select</option>
+          <option v-for="(repo, index) in repositories" :key="index">
+            {{ repo }}
+          </option>
+        </select>
+      </div>
     </div>
   </div>
+  <GanttChart
+    v-if="username && password && repo"
+    :username="username"
+    :password="password"
+    :repository="repo"
+  />
 </template>
 
 <script>
+import GanttChart from "@/components/GanttChart.vue";
 import axios from "axios";
-
 export default {
-  name: "GanttChart",
+  name: "FORTY",
+  components: { GanttChart },
   props: ["username", "password"],
   data() {
     return {
       hours: {},
       repositories: [],
+      repo: "",
       organization: "",
     };
   },
@@ -37,6 +54,9 @@ export default {
     this.fetchIssues();
   },
   methods: {
+    changeCountry(event) {
+      this.repo = event.target.value;
+    },
     getPreviousMonday() {
       var prevMonday = new Date();
       prevMonday.setDate(
@@ -94,7 +114,7 @@ export default {
         });
       });
     },
-    allI(repos) {
+    AllIssues(repos) {
       const startingDay = this.getStatingMonday();
       var lastDay = new Date(startingDay);
       lastDay.setDate(lastDay.getDate() - 7);
@@ -109,6 +129,7 @@ export default {
           },
         })
           .then((response) => {
+            //console.log("res", response.data);
             this.formateIssue(response.data);
           })
           .catch((error) => {
@@ -116,8 +137,12 @@ export default {
           });
       });
     },
+    AllRepo(repos) {
+      repos.forEach((repo) => {
+        this.repositories.push(repo.full_name);
+      });
+    },
     fetchIssues() {
-      console.log("CoalAI", this.organization);
       let nextPage = true;
       let page = 1;
       while (nextPage) {
@@ -130,7 +155,8 @@ export default {
           },
         })
           .then((response) => {
-            this.allI(response.data);
+            this.AllIssues(response.data);
+            this.AllRepo(response.data);
             if (response.data.length < 1) {
               nextPage = false;
               return;
