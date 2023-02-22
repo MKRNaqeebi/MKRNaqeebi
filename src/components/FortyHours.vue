@@ -52,7 +52,6 @@ export default {
       return startingDay;
     },
     formateIssue(issues) {
-      console.log("isse", issues);
       issues.forEach((issue) => {
         if (issue.labels.length < 1) return;
         // check if issue is closed before last Monday
@@ -110,7 +109,6 @@ export default {
           },
         })
           .then((response) => {
-            //console.log("res", response.data);
             this.formateIssue(response.data);
           })
           .catch((error) => {
@@ -137,7 +135,6 @@ export default {
               nextPage = false;
               return;
             }
-            //this.formate(response.data);
           })
           .catch((error) => {
             nextPage = false;

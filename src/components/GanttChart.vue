@@ -1,4 +1,5 @@
 <template>
+  <button @click="fetchIssues">Fetch</button>
   <g-gantt-chart
     :chart-start="start"
     :chart-end="end"
@@ -20,7 +21,17 @@ import axios from "axios";
 
 export default {
   name: "GanttChart",
-  props: ["username", "password", "repository"],
+  props: {
+    username: {
+      type: String,
+    },
+    password: {
+      type: String,
+    },
+    repository: {
+      type: String,
+    },
+  },
   data() {
     return {
       start: "",
