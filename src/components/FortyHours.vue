@@ -79,7 +79,6 @@ export default {
     },
     formateIssue(issues) {
       issues.forEach((issue) => {
-        console.log(issue.assignee.login);
         if (issue.labels.length < 1) return;
         // check if issue is closed before last Monday
         issue.labels.forEach((label) => {
