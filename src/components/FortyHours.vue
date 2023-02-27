@@ -17,6 +17,11 @@
           </li>
         </ul>
       </div>
+       <ul>
+        <li v-for="(tempassignee, assignee) in tempassignee" v-bind:key="assignee">
+           {{ assignee }}: total Hours: {{tempassignee }} 
+        </li>
+      </ul>
       <div id="vue-instance" class="form-group">
         <select class="form-control" @change="changeRepo($event)">
           <option value="" selected disabled>Please Select</option>
@@ -48,6 +53,7 @@ export default {
       repositories: [],
       repo: "",
       organization: "",
+      tempassignee: {},
     };
   },
   mounted() {
@@ -73,6 +79,7 @@ export default {
     },
     formateIssue(issues) {
       issues.forEach((issue) => {
+        console.log(issue.assignee.login);
         if (issue.labels.length < 1) return;
         // check if issue is closed before last Monday
         issue.labels.forEach((label) => {
@@ -107,6 +114,19 @@ export default {
                   parseInt(label.name);
               }
             }
+            var hours = 2;
+              issue.labels.forEach((label) => {
+                if (label.name.length < 3 && /^\d+$/.test(label.name)) {
+                    hours = parseInt(label.name);
+                  }
+                });
+                let issueAssign = issue.assignee.login;
+                if (issueAssign in this.tempassignee) {
+                  this.tempassignee[issueAssign] =
+                    this.tempassignee[issueAssign] + hours;
+                } else {
+                  this.tempassignee[issueAssign] = hours;
+                }
           } catch (error) {
             console.log(error);
             console.log(issue.html_url);
