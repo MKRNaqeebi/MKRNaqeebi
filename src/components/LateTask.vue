@@ -101,7 +101,6 @@
             }
           });
         });
-        console.log(tempIssues);
         this.issues = tempIssues;
       },
       fetchAllIssues() {
@@ -115,7 +114,6 @@
         })
           .then((response) => {
             this.formateIssue(response.data);
-            console.log(response.data);
           })
           .catch((error) => {
             console.log(error);
