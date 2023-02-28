@@ -41,13 +41,15 @@ import axios from "axios";
 export default {
   name: "FORTY",
   components: { GanttChart },
-  props: ["username", "password"],
+  // props: ["username", "password"],
   data() {
     return {
       hours: {},
       repositories: [],
       repo: "",
-      organization: "",
+      organization: "CoalAI",
+      username: "LaiqaRafiq",
+      password: "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",
     };
   },
   mounted() {

@@ -2,7 +2,9 @@
     <div class="bgColor py-5">
         <div class="container mx-auto p-5 bgColor w-5/6">
             <div class="flex my-5">
-                <div class="flex-1 w-64"><p class="text-xl">Developer Info</p></div>
+                <div class="flex-1 w-64">
+                    <p class="text-xl">Developer Info</p>
+                </div>
                 <div class="flex-1 w-96">
                     <div class="flex">
                         <div class="flex-1 w-0 my-3">
@@ -18,8 +20,8 @@
                                     </div>
                                     <div class="arrow" :class="{ expanded: visible }"></div>
                                     <div :class="{ hidden: !visible, visible }">
-                                        <ul>
-                                            <li :class="{ current: item === value }" v-for="item in list"
+                                        <ul class="ulStyle">
+                                            <li class="liStyle" :class="{ current: item === value }" v-for="item in list"
                                                 @click="select(item)"><b>{{ item }}</b></li>
                                         </ul>
                                     </div>
@@ -47,24 +49,27 @@
                 </div>
             </div>
             <div class="conatiner bg-white drop-shadow-lg my-5 rounded-2xl">
-                <div class="h-80 py-3">
+                <div class=" m-3 py-3">
                     <div class="section2 ml--5">
                         <div class="imgRepo"><img src="../assets/RepositriesIcon.svg" alt=""></div>
                         <div class="textAlign">Respositries</div>
                         <div class="aselect " :data-value="valueRepo" :data-list="repositries">
-                                <div class="selector" @click="toggleRepo()">
-                                    <div class="label">
-                                        <h4 class="text-lg">{{ valueRepo }}</h4>
-                                    </div>
-                                    <div class="arrow" :class="{ expanded: visibleRepo }"></div>
-                                    <div :class="{ hidden: !visibleRepo, visibleRepo }">
-                                        <ul>
-                                            <li :class="{ current: item === valueRepo }" v-for="item in repositries"
-                                                @click="selectRepo(item)"><b>{{ item }}</b></li>
-                                        </ul>
-                                    </div>
+                            <div class="selector" @click="toggleRepo()">
+                                <div class="label">
+                                    <h4 class="text-lg">{{ valueRepo }}</h4>
+                                </div>
+                                <div class="arrow" :class="{ expanded: visibleRepo }"></div>
+                                <div :class="{ hidden: !visibleRepo, visibleRepo }">
+                                    <ul class="ulStyle">
+                                        <li class="liStyle" :class="{current: item === valueRepo }" v-for="item in repositries"
+                                            @click="selectRepo(item)"><b>{{ item }}</b></li>
+                                    </ul>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div>
+                        <FortyHours />
                     </div>
                 </div>
             </div>
@@ -72,9 +77,12 @@
     </div>
 </template>
 <script>
+import FortyHours from "../components/FortyHours.vue";
 export default {
     name: "DeveloperInfo",
+    components: {FortyHours},
     data() {
+        
         return {
             assigneesData: [
                 { assignee: "aishatasaduq", openTask: '04', closeTask: '06' },
@@ -89,7 +97,7 @@ export default {
             repositries: ["Select Repository", "ABC", "Coaldev Invoice", "Coaldev Website", "XYZ"],
 
             value: 'Select',
-			list: ["Select","Monthly","Weekly"],
+            list: ["Select", "Monthly", "Weekly"],
             visible: false,
             valueRepo: 'Select Repository',
             visibleRepo: false,
@@ -97,18 +105,18 @@ export default {
     },
     methods: {
         toggle() {
-				this.visible = !this.visible;
-			},
-			select(option) {
-			    this.value = option;
-			},
+            this.visible = !this.visible;
+        },
+        select(option) {
+            this.value = option;
+        },
 
-            toggleRepo() {
-				this.visibleRepo = !this.visibleRepo;
-			},
-			selectRepo(option) {
-			    this.valueRepo = option;
-			}
+        toggleRepo() {
+            this.visibleRepo = !this.visibleRepo;
+        },
+        selectRepo(option) {
+            this.valueRepo = option;
+        }
     },
 
 }
@@ -121,6 +129,7 @@ export default {
 .bgColor {
     background-color: #EFEDE9;
 }
+
 .NumStyleOpenTask {
     font-size: 3rem;
     color: #495175;
@@ -149,6 +158,7 @@ export default {
     text-align: center;
     margin: 12px 17px;
 }
+
 .textAlign {
     text-align: center;
     margin: 12px 0px;
@@ -160,68 +170,79 @@ export default {
     width: 13rem;
     text-align: left;
 }
-		.selector {
-			border: 1px solid #F7B696;
-			background: #F7B696;
-			position: relative;
-			z-index: 1;
-            border-radius: 8px;
-        }
-			.arrow {
-				position: absolute;
-				right: 10px;
-				top: 40%;
-				width: 0;
-				height: 0;
-				border-left: 7px solid transparent;
-				border-right: 7px solid transparent;
-				border-top: 10px solid #495175;;
-				transform: rotateZ(0deg) translateY(0px);
-				transition-duration: 0.3s;
-				transition-timing-function: cubic-bezier(.59,1.39,.37,1.01);
-			}
-			.expanded {
-				transform: rotateZ(180deg) translateY(2px);
-			}
-			.label {
-				display: block;
-				padding: 10px;
-				font-size: 16px;
-				color: black;
-			}
-		ul {
-			width: 100%;
-			list-style-type: none;
-      padding: 0;
-      margin: 0;
-			font-size: 16px;
-			border: 1px solid gainsboro;
-			position: absolute;
-			z-index: 1;
-      background: #F7B696;
-      border-radius: 8px;
 
-		}
-		li {
-			padding: 12px;
-            color: #495175;
-            background: #F7B696;
-            border-radius: 8px;
-		}
-        li:hover{
-            color: black;
-			background: #f3d2c2;
-        }
-		.current {
-			background: #f3d2c2;
-		}
-		.hidden {
-			visibility: hidden;
-		}
-		.visible {
-			visibility: visible;
-		}
-	.section2{
-        display: flex;
-    }
-</style>
+.selector {
+    border: 1px solid #F7B696;
+    background: #F7B696;
+    position: relative;
+    z-index: 1;
+    border-radius: 8px;
+}
+
+.arrow {
+    position: absolute;
+    right: 10px;
+    top: 40%;
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top: 10px solid #495175;
+    ;
+    transform: rotateZ(0deg) translateY(0px);
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(.59, 1.39, .37, 1.01);
+}
+
+.expanded {
+    transform: rotateZ(180deg) translateY(2px);
+}
+
+.label {
+    display: block;
+    padding: 10px;
+    font-size: 16px;
+    color: black;
+}
+
+.ulStyle {
+    width: 100%;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    font-size: 16px;
+    border: 1px solid gainsboro;
+    position: absolute;
+    z-index: 1;
+    background: #F7B696;
+    border-radius: 8px;
+
+}
+
+.liStyle {
+    padding: 12px;
+    color: #495175;
+    background: #F7B696;
+    border-radius: 8px;
+}
+
+.liStyle:hover {
+    color: black;
+    background: #f3d2c2;
+}
+
+.current {
+    background: #f3d2c2;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.visible {
+    visibility: visible;
+}
+
+.section2 {
+    display: flex;
+}</style>

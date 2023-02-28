@@ -1,6 +1,6 @@
 <template>
   <AllOpenIssues v-if="github" />
-  <!--<GitHub v-if="github" />-->
+  <!-- <GitHub v-if="github" /> -->
   <HomeView v-else />
 </template>
 

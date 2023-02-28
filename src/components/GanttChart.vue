@@ -37,6 +37,7 @@ export default {
       start: "",
       end: "",
       issues: [],
+      // repository: "CoalDevInvoice"
     };
   },
   mounted() {
@@ -108,8 +109,10 @@ export default {
         method: "get",
         url: `https://api.github.com/repos/${this.repository}/issues?state=open`,
         auth: {
-          username: this.username,
-          password: this.password,
+          // username: this.username,
+          // password: this.password,
+          username: "LaiqaRafiq",
+          password: "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",
         },
       })
         .then((response) => {
