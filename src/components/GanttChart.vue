@@ -28,16 +28,16 @@ export default {
     password: {
       type: String,
     },
-    repository: {
-      type: String,
-    },
+    // repository: {
+    //   type: String,
+    // },
   },
   data() {
     return {
       start: "",
       end: "",
       issues: [],
-      // repository: "CoalDevInvoice"
+      repository: "CoalAI/CoalDevInvoice"
     };
   },
   mounted() {

@@ -69,7 +69,7 @@
                         </div>
                     </div>
                     <div>
-                        <FortyHours />
+                        <GanttChart />
                     </div>
                 </div>
             </div>
@@ -77,10 +77,10 @@
     </div>
 </template>
 <script>
-import FortyHours from "../components/FortyHours.vue";
+import GanttChart from "../components/GanttChart.vue";
 export default {
     name: "DeveloperInfo",
-    components: {FortyHours},
+    components: {GanttChart},
     data() {
         
         return {
