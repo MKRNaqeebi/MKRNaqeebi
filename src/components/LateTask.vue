@@ -1,5 +1,5 @@
 <template>
-    <div class="all">
+    <div  class="m-8 mt-6">
       <h1>List all red issues</h1>
       <button @click="fetchAllIssues">Fetch ALL task</button>
     </div>
@@ -122,10 +122,3 @@
     },
   };
   </script>
-  <style scoped>
-  .all {
-   margin-top: 50px;
-   margin-left: 300px;
-  }
-  </style>
-  
