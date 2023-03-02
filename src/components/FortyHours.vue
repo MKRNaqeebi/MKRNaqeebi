@@ -49,7 +49,7 @@ export default {
       repo: "CoalDevInvoice",
       organization: "CoalAI",
       username: "LaiqaRafiq",
-      password: "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",
+      password: "123",
     };
   },
   mounted() {

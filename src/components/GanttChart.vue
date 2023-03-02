@@ -112,7 +112,7 @@ export default {
           // username: this.username,
           // password: this.password,
           username: "LaiqaRafiq",
-          password: "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",
+          password: "123",
         },
       })
         .then((response) => {
