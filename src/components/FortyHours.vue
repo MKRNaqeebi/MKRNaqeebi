@@ -13,15 +13,10 @@
         <ul>
           <li v-for="(hour, assignee) in hours" v-bind:key="assignee">
             {{ assignee }}: current: {{ hour.current }} and previous:
-            {{ hour.previous }} hours
+            {{ hour.previous }} hours total Hours: {{hour.totalHours }} 
           </li>
         </ul>
       </div>
-       <ul>
-        <li v-for="(tempassignee, assignee) in tempassignee" v-bind:key="assignee">
-           {{ assignee }}: total Hours: {{tempassignee }} 
-        </li>
-      </ul>
       <div id="vue-instance" class="form-group">
         <select class="form-control" @change="changeRepo($event)">
           <option value="" selected disabled>Please Select</option>
@@ -53,7 +48,6 @@ export default {
       repositories: [],
       repo: "",
       organization: "",
-      tempassignee: {},
     };
   },
   mounted() {
@@ -99,6 +93,7 @@ export default {
                   current: 0,
                   previous: 0,
                   next: 0,
+                  totalHours: 0,
                 };
               }
               if (
@@ -119,12 +114,12 @@ export default {
                     hours = parseInt(label.name);
                   }
                 });
-                let issueAssign = issue.assignee.login;
-                if (issueAssign in this.tempassignee) {
-                  this.tempassignee[issueAssign] =
-                    this.tempassignee[issueAssign] + hours;
+                let issueAssign = issue.assignee.login.toLowerCase();
+                if (issueAssign in this.hours) {
+                  this.hours[issueAssign]["totalHours"] =
+                  this.hours[issueAssign]["totalHours"] + hours;
                 } else {
-                  this.tempassignee[issueAssign] = hours;
+                  this.hours[issueAssign]["totalHours"] = hours;
                 }
           } catch (error) {
             console.log(error);
