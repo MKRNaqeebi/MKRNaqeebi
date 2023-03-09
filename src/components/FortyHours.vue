@@ -33,15 +33,21 @@
     :password="password"
     :repository="repo"
   />
+  <LateTask
+    v-if="username && password"
+    :username="username"
+    :password="password"
+  />
 </template>
 
 <script>
 import GanttChart from "../components/GanttChart.vue";
+import LateTask from "../components/LateTask.vue";
 import axios from "axios";
 export default {
   name: "FORTY",
-  components: { GanttChart },
-  // props: ["username", "password"],
+  components: { GanttChart, LateTask },
+  props: ["username", "password"],
   data() {
     return {
       hours: {},
