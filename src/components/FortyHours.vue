@@ -13,7 +13,7 @@
         <ul>
           <li v-for="(hour, assignee) in hours" v-bind:key="assignee">
             {{ assignee }}: current: {{ hour.current }} and previous:
-            {{ hour.previous }} hours
+            {{ hour.previous }} hours total Hours: {{hour.totalHours }} 
           </li>
         </ul>
       </div>
@@ -99,6 +99,7 @@ export default {
                   current: 0,
                   previous: 0,
                   next: 0,
+                  totalHours: 0,
                 };
               }
               if (
@@ -113,6 +114,19 @@ export default {
                   parseInt(label.name);
               }
             }
+            var hours = 2;
+              issue.labels.forEach((label) => {
+                if (label.name.length < 3 && /^\d+$/.test(label.name)) {
+                    hours = parseInt(label.name);
+                  }
+                });
+                let issueAssign = issue.assignee.login.toLowerCase();
+                if (issueAssign in this.hours) {
+                  this.hours[issueAssign]["totalHours"] =
+                  this.hours[issueAssign]["totalHours"] + hours;
+                } else {
+                  this.hours[issueAssign]["totalHours"] = hours;
+                }
           } catch (error) {
             console.log(error);
             console.log(issue.html_url);
