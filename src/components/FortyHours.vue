@@ -52,10 +52,10 @@ export default {
     return {
       hours: {},
       repositories: [],
-      repo: "CoalDevInvoice",
-      organization: "CoalAI",
-      username: "LaiqaRafiq",
-      password: "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",
+      repo: "",
+      organization: "",
+      username: "",
+      password: "",
     };
   },
   mounted() {

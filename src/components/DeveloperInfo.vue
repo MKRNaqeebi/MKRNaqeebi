@@ -1,6 +1,6 @@
 <template >
-    <div class="bgColor py-5">
-        <div class="container mx-auto p-5 bgColor w-5/6">
+    <div class="bg_color py-5">
+        <div class="container mx-auto p-5 bg_color w-5/6">
             <div class="flex my-5">
                 <div class="flex-1 w-64">
                     <p class="text-xl">Developer Info</p>
@@ -38,11 +38,11 @@
                         <div class="mb-3">{{ data.assignee }}</div>
                         <div class="bg-white rounded-2xl drop-shadow-lg">
                             <div
-                                v-bind:class="index % 2 == 0 ? 'grid grid-cols-2 gap-0 leftBorder1 rounded-2xl' : 'grid grid-cols-2 gap-0 leftBorder2 rounded-2xl'">
+                                v-bind:class="index % 2 == 0 ? 'grid grid-cols-2 gap-0 left_border1 rounded-2xl' : 'grid grid-cols-2 gap-0 left_border2 rounded-2xl'">
                                 <div class="pt-3 text-center">Open Task</div>
-                                <div class="NumStyleOpenTask">{{ data.openTask }}</div>
+                                <div class="num_style_open_task">{{ data.openTask }}</div>
                                 <div class="pt-3 text-center">Close Task</div>
-                                <div class="NumStyleCloseTask">{{ data.closeTask }}</div>
+                                <div class="num_style_close_task">{{ data.closeTask }}</div>
                             </div>
                         </div>
                     </div>
@@ -51,8 +51,8 @@
             <div class="conatiner bg-white drop-shadow-lg my-5 rounded-2xl">
                 <div class=" m-3 py-3">
                     <div class="section2 ml--5">
-                        <div class="imgRepo"><img src="../assets/RepositriesIcon.svg" alt=""></div>
-                        <div class="textAlign">Respositries</div>
+                        <div class="img_repo"><img src="../assets/RepositriesIcon.svg" alt=""></div>
+                        <div class="text_align">Respositries</div>
                         <div class="aselect " :data-value="valueRepo" :data-list="repositries">
                             <div class="selector" @click="toggleRepo()">
                                 <div class="label">
@@ -126,27 +126,27 @@ export default {
     font-family: "Montserrat";
 }
 
-.bgColor {
+.bg_color {
     background-color: #EFEDE9;
 }
 
-.NumStyleOpenTask {
+.num_style_open_task {
     font-size: 3rem;
     color: #495175;
     text-align: center;
 }
 
-.NumStyleCloseTask {
+.num_style_close_task {
     font-size: 3rem;
     color: #F7B696;
     text-align: center;
 }
 
-.leftBorder1 {
+.left_border1 {
     border-left: 10px solid #F7B696;
 }
 
-.leftBorder2 {
+.left_border2 {
     border-left: 10px solid #495175;
 }
 
@@ -154,12 +154,12 @@ export default {
     margin-left: 81%;
 }
 
-.imgRepo {
+.img_repo {
     text-align: center;
     margin: 12px 17px;
 }
 
-.textAlign {
+.text_align {
     text-align: center;
     margin: 12px 0px;
 }

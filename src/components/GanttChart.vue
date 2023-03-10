@@ -28,9 +28,6 @@ export default {
     password: {
       type: String,
     },
-    // repository: {
-    //   type: String,
-    // },
   },
   data() {
     return {
@@ -109,10 +106,8 @@ export default {
         method: "get",
         url: `https://api.github.com/repos/${this.repository}/issues?state=open`,
         auth: {
-          // username: this.username,
-          // password: this.password,
-          username: "LaiqaRafiq",
-          password: "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",
+          username: this.username,
+          password: this.password,
         },
       })
         .then((response) => {
