@@ -5,6 +5,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+
 import HomeView from "./views/HomeView.vue";
 import GitHub from "./views/GitHub.vue";
 
