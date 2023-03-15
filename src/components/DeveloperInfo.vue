@@ -67,6 +67,7 @@
                                 </div>
                             </div>
                         </div>
+                        <div><button @click="selectIssuesByRepo" v-bind:class="this.select2==false ? 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none text-base mt-4 md:mt-0': 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none text-base mt-4 md:mt-0 btnSelect'">Next</button></div>
                     </div>
                     <div>
                         <GanttChart />
@@ -245,4 +246,10 @@ export default {
 
 .section2 {
     display: flex;
-}</style>
+}
+.button{
+    background-color: #F7B696;
+    border-radius: 6px;
+    margin: 
+}
+</style>

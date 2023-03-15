@@ -10,7 +10,7 @@
     <g-gantt-row
       v-for="issue in issues"
       :key="issue.id"
-      label=""
+      :label="issue.title"
       :bars="issue.bar"
     />
   </g-gantt-chart>
@@ -22,12 +22,12 @@ import axios from "axios";
 export default {
   name: "GanttChart",
   props: {
-    username: {
-      type: String,
-    },
-    password: {
-      type: String,
-    },
+    // username: {
+    //   type: String,
+    // },
+    // password: {
+    //   type: String,
+    // },
     // repository: {
     //   type: String,
     // },
@@ -37,7 +37,10 @@ export default {
       start: "",
       end: "",
       issues: [],
-      repository: "CoalAI/CoalDevInvoice"
+      repository: "CoalAI/ganttissues",
+      username: "LaiqaRafiq",
+      password: "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"
+
     };
   },
   mounted() {
@@ -52,6 +55,7 @@ export default {
         temp.title = issue.title;
         temp.id = issue.id;
         temp.bar = [{}];
+        // console.log("issue", issue);
         issue.labels.forEach((label) => {
           try {
             if (label.name.length == 8 && /^\d+$/.test(label.name)) {
@@ -65,6 +69,7 @@ export default {
                   hours = parseInt(label.name);
                 }
               });
+              console.log("endDate", endDate);
               temp.bar[0].endDate = endDate;
               let beginDate = new Date(endDate);
               // minus hours from myBeginDate
@@ -103,16 +108,24 @@ export default {
         });
       });
       this.issues = tempIssues;
+      // this.start = "2023-01-19";
+      // this.end = "2023-01-24";
+      // this.beginDate = "2023-01-19";
+      // this.endDate = "2023-01-24";
+      console.log("start and end date:", this.start, this.end);
+      console.log("beginDate and endDate:", this.beginDate, this.endDate);
     },
     fetchIssues() {
+      console.log("repository", this.repository);
       axios({
         method: "get",
         url: `https://api.github.com/repos/${this.repository}/issues?state=open`,
         auth: {
           // username: this.username,
           // password: this.password,
-          username: "LaiqaRafiq",
-          password: "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",
+          username: this.username,
+          password: this.password,
+          
         },
       })
         .then((response) => {
