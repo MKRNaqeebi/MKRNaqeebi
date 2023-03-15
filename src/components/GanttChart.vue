@@ -1,18 +1,7 @@
 <template>
   <button @click="fetchIssues">Fetch</button>
-  <g-gantt-chart
-    :chart-start="start"
-    :chart-end="end"
-    precision="hour"
-    bar-start="beginDate"
-    bar-end="endDate"
-  >
-    <g-gantt-row
-      v-for="issue in issues"
-      :key="issue.id"
-      label=""
-      :bars="issue.bar"
-    />
+  <g-gantt-chart :chart-start="start" :chart-end="end" precision="hour" bar-start="beginDate" bar-end="endDate">
+    <g-gantt-row v-for="issue in issues" :key="issue.id" label="" :bars="issue.bar" />
   </g-gantt-chart>
 </template>
 
@@ -28,16 +17,21 @@ export default {
     password: {
       type: String,
     },
+    repository: {
+      type: String,
+    }
   },
   data() {
     return {
       start: "",
       end: "",
       issues: [],
-      repository: "CoalAI/CoalDevInvoice"
     };
   },
   mounted() {
+    this.fetchIssues();
+  },
+  updated() {
     this.fetchIssues();
   },
   methods: {
@@ -120,3 +114,8 @@ export default {
   },
 };
 </script>
+<style>
+.g-timeaxis {
+  z-index: 0 !important;
+}
+</style>

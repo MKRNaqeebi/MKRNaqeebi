@@ -33,21 +33,30 @@
             </div>
 
             <div class="grid grid-cols-4 gap-16">
-                <div v-for="data, index in assigneesData">
+                <div v-for="hour, assignee in hours">
                     <div class="container mr-5 p-3">
-                        <div class="mb-3">{{ data.assignee }}</div>
+                        <div class="mb-3">{{ assignee }}</div>
                         <div class="bg-white rounded-2xl drop-shadow-lg">
                             <div
                                 v-bind:class="index % 2 == 0 ? 'grid grid-cols-2 gap-0 left_border1 rounded-2xl' : 'grid grid-cols-2 gap-0 left_border2 rounded-2xl'">
-                                <div class="pt-3 text-center">Open Task</div>
-                                <div class="num_style_open_task">{{ data.openTask }}</div>
-                                <div class="pt-3 text-center">Close Task</div>
-                                <div class="num_style_close_task">{{ data.closeTask }}</div>
+                                <div class="pt-3 text-center">Current hours</div>
+                                <div class="num_style_open_task">{{ hour.current }}</div>
+                                <div class="pt-3 text-center">Previous hours</div>
+                                <div class="num_style_close_task">{{ hour.previous }}</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- <div id="vue-instance" class="form-group">
+        <select class="form-control" @change="changeRepo($event)">
+          <option value="" selected disabled>Please Select</option>
+          <option v-for="(repo, index) in repositories" :key="index">
+            {{ repo }}
+          </option>
+        </select>
+    </div> -->
             <div class="conatiner bg-white drop-shadow-lg my-5 rounded-2xl">
                 <div class=" m-3 py-3">
                     <div class="section2 ml--5">
@@ -61,8 +70,8 @@
                                 <div class="arrow" :class="{ expanded: visibleRepo }"></div>
                                 <div :class="{ hidden: !visibleRepo, visibleRepo }">
                                     <ul class="ulStyle">
-                                        <li class="liStyle" :class="{current: item === valueRepo }" v-for="item in repositries"
-                                            @click="selectRepo(item)"><b>{{ item }}</b></li>
+                                        <li class="liStyle" :class="{ current: item === valueRepo }"
+                                            v-for="item in repositries" @click="selectRepo(item)"><b>{{ item }}</b></li>
                                     </ul>
                                 </div>
                             </div>
@@ -80,9 +89,9 @@
 import GanttChart from "../components/GanttChart.vue";
 export default {
     name: "DeveloperInfo",
-    components: {GanttChart},
+    components: { GanttChart },
     data() {
-        
+
         return {
             assigneesData: [
                 { assignee: "aishatasaduq", openTask: '04', closeTask: '06' },
@@ -114,6 +123,10 @@ export default {
         toggleRepo() {
             this.visibleRepo = !this.visibleRepo;
         },
+        changeRepo(event) {
+            this.repo = event.target.value;
+            this.visibleRepo = !this.visibleRepo;
+        },
         selectRepo(option) {
             this.valueRepo = option;
         }
@@ -121,7 +134,7 @@ export default {
 
 }
 </script>
-<style>
+<style scoped>
 * {
     font-family: "Montserrat";
 }
@@ -216,6 +229,9 @@ export default {
     z-index: 1;
     background: #F7B696;
     border-radius: 8px;
+    max-height: 150px;
+    overflow: hidden;
+    overflow-y: auto;
 
 }
 
@@ -245,4 +261,5 @@ export default {
 
 .section2 {
     display: flex;
-}</style>
+}
+</style>

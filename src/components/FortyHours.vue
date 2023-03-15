@@ -1,5 +1,84 @@
 <template>
-  <div>
+  <div class="bg_color py-5">
+    <div class="container mx-auto p-5 bg_color w-5/6">
+      <div class="flex my-5">
+        <div class="flex-1 w-64">
+          <p class="text-xl">Developer Info</p>
+        </div>
+        <div class="flex-1 w-96">
+          <div class="flex">
+            <div class="flex-1 w-0 my-3">
+              <img class="icon" src="../assets/SwitchCalendarIcon.svg" />
+            </div>
+            <div class="flex-1 w-8 my-3">Switch your calender view</div>
+            <div class="flex-1 w-6 ml-1">
+
+              <div class="aselect1" :data-value="value" :data-list="list">
+                <div class="selector" @click="toggle()">
+                  <div class="label">
+                    <p class="text-lg">{{ value }}</p>
+                  </div>
+                  <div class="arrow" :class="{ expanded: visible }"></div>
+                  <div :class="{ hidden: !visible, visible }">
+                    <ul class="ulStyle">
+                      <li class="liStyle" :class="{ current: item === value }" v-for="item in list" @click="select(item)">
+                        <b>{{ item }}</b>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-4 gap-16">
+        <div v-for="hour, assignee in hours">
+          <div class="container mr-5 p-3">
+            <div class="mb-3">{{ assignee }}</div>
+            <div class="bg-white rounded-2xl drop-shadow-lg">
+              <div
+                v-bind:class="index % 2 == 0 ? 'grid grid-cols-2 gap-0 left_border1 rounded-2xl' : 'grid grid-cols-2 gap-0 left_border2 rounded-2xl'">
+                <div class="pt-3 text-center">Current hours</div>
+                <div class="num_style_open_task">{{ hour.current }}</div>
+                <div class="pt-3 text-center">Previous hours</div>
+                <div class="num_style_close_task">{{ hour.previous }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="conatiner bg-white drop-shadow-lg my-5 rounded-2xl">
+        <div class=" m-3 py-3">
+          <div class="section2 ml--5">
+            <div class="img_repo"><img src="../assets/RepositriesIcon.svg" alt=""></div>
+            <div class="text_align">Respositries</div>
+            <div class="aselect ">
+              <div class="selector" @click="changeRepo($event)">
+                <div class="label">
+                  <h4 class="text-lg">{{ valueRepo ? valueRepo : "Select Repository" }}</h4>
+                </div>
+                <div class="arrow" :class="{ expanded: visibleRepo }"></div>
+                <div :class="{ hidden: !visibleRepo, visibleRepo }">
+                  <ul class="ulStyle">
+                    <li class="liStyle" :class="{ current: item === valueRepo }" v-for="item in this.repositories"
+                      @click="selectRepo(item)"><b>{{ item }}</b>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <GanttChart v-if="username && password && valueRepo" :username="username" :password="password"
+              :repository="valueRepo" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div>
     <div class="forty-hours">
       <div class="forty-hours__header">
         <h3 class="forty-hours__title">Forty Hours</h3>
@@ -37,7 +116,7 @@
     v-if="username && password"
     :username="username"
     :password="password"
-  />
+  /> -->
 </template>
 
 <script>
@@ -53,17 +132,33 @@ export default {
       hours: {},
       repositories: [],
       repo: "",
-      organization: "",
-      username: "",
-      password: "",
+      organization: "CoalAI",
+      visibleRepo: false,
+      valueRepo: null,
+      value: 'Select',
+      list: ["Select", "Monthly", "Weekly"],
+      visible: false,
     };
   },
   mounted() {
     this.fetchIssues();
   },
   methods: {
-    changeRepo(event) {
-      this.repo = event.target.value;
+    toggle() {
+      this.visible = !this.visible;
+    },
+    select(option) {
+      this.value = option;
+    },
+
+    toggleRepo() {
+      this.visibleRepo = !this.visibleRepo;
+    },
+    selectRepo(option) {
+      this.valueRepo = option;
+    },
+    changeRepo() {
+      this.visibleRepo = !this.visibleRepo;
     },
     getPreviousMonday() {
       var prevMonday = new Date();
@@ -185,8 +280,20 @@ export default {
 };
 </script>
 <style scoped>
-ul {
-  display: flex;
-  column-gap: 2rem;
+.ulStyle {
+  width: 100%;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  font-size: 16px;
+  border: 1px solid gainsboro;
+  position: absolute;
+  z-index: 1;
+  background: #F7B696;
+  border-radius: 8px;
+  max-height: 150px;
+  overflow: hidden;
+  overflow-y: auto;
+
 }
 </style>
