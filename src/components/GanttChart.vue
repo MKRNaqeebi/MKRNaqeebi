@@ -1,8 +1,8 @@
 <template>
   <button @click="fetchIssues">Fetch</button>
   <g-gantt-chart
-    :chart-start="start"
-    :chart-end="end"
+    :chart-start="2023-02-01"
+    :chart-end="2023-02-07"
     precision="hour"
     bar-start="beginDate"
     bar-end="endDate"
@@ -10,9 +10,11 @@
     <g-gantt-row
       v-for="issue in issues"
       :key="issue.id"
-      :label="issue.title"
+      :label="issue"
+      
       :bars="issue.bar"
     />
+    <!-- .bar[0].ganttBarConfig.no" -->
   </g-gantt-chart>
 </template>
 
@@ -95,6 +97,7 @@ export default {
               temp.bar[0].ganttBarConfig = {};
               temp.bar[0].ganttBarConfig.id = issue.id;
               temp.bar[0].ganttBarConfig.label = `#${issue.number} ${issue.title}`;
+              temp.bar[0].ganttBarConfig.no = issue.number;
               // if end date is less than current date, set bar color to red
               if (new Date(endDate) < new Date()) {
                 temp.bar[0].ganttBarConfig.style = {};
