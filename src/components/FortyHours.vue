@@ -19,8 +19,8 @@
                   </div>
                   <div class="arrow" :class="{ expanded: visible }"></div>
                   <div :class="{ hidden: !visible, visible }">
-                    <ul class="ulStyle">
-                      <li class="liStyle" :class="{ current: item === value }" v-for="item in list" @click="select(item)">
+                    <ul class="ul-style">
+                      <li class="li-style" :class="{ current: item === value }" v-for="item in list" @click="select(item)">
                         <b>{{ item }}</b>
                       </li>
                     </ul>
@@ -60,8 +60,8 @@
                 </div>
                 <div class="arrow" :class="{ expanded: visibleRepo }"></div>
                 <div :class="{ hidden: !visibleRepo, visibleRepo }">
-                  <ul class="ulStyle">
-                    <li class="liStyle" :class="{ current: item === valueRepo }" v-for="item in this.repositories"
+                  <ul class="ul-style">
+                    <li class="li-style" :class="{ current: item === valueRepo }" v-for="item in this.repositories"
                       @click="selectRepo(item)"><b>{{ item }}</b>
                     </li>
                   </ul>
@@ -239,7 +239,7 @@ export default {
 };
 </script>
 <style scoped>
-.ulStyle {
+.ul-style {
   width: 100%;
   list-style-type: none;
   padding: 0;
@@ -253,6 +253,5 @@ export default {
   max-height: 150px;
   overflow: hidden;
   overflow-y: auto;
-
 }
 </style>
