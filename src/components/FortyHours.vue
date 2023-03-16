@@ -1,6 +1,6 @@
 <template>
-  <div class="bg_color py-5">
-    <div class="container mx-auto p-5 bg_color w-5/6">
+  <div class="bg-color py-5">
+    <div class="container mx-auto p-5 bg-color w-5/6">
       <div class="flex my-5">
         <div class="flex-1 w-64">
           <p class="text-xl">Developer Info</p>
@@ -12,7 +12,6 @@
             </div>
             <div class="flex-1 w-8 my-3">Switch your calender view</div>
             <div class="flex-1 w-6 ml-1">
-
               <div class="aselect1" :data-value="value" :data-list="list">
                 <div class="selector" @click="toggle()">
                   <div class="label">
@@ -39,11 +38,11 @@
             <div class="mb-3">{{ assignee }}</div>
             <div class="bg-white rounded-2xl drop-shadow-lg">
               <div
-                v-bind:class="index % 2 == 0 ? 'grid grid-cols-2 gap-0 left_border1 rounded-2xl' : 'grid grid-cols-2 gap-0 left_border2 rounded-2xl'">
+                v-bind:class="index % 2 == 0 ? 'grid grid-cols-2 gap-0 left-border1 rounded-2xl' : 'grid grid-cols-2 gap-0 left-border2 rounded-2xl'">
                 <div class="pt-3 text-center">Current hours</div>
-                <div class="num_style_open_task">{{ hour.current }}</div>
+                <div class="num-style-open-task">{{ hour.current }}</div>
                 <div class="pt-3 text-center">Previous hours</div>
-                <div class="num_style_close_task">{{ hour.previous }}</div>
+                <div class="num-style-close-task">{{ hour.previous }}</div>
               </div>
             </div>
           </div>
@@ -52,8 +51,8 @@
       <div class="conatiner bg-white drop-shadow-lg my-5 rounded-2xl">
         <div class=" m-3 py-3">
           <div class="section2 ml--5">
-            <div class="img_repo"><img src="../assets/RepositriesIcon.svg" alt=""></div>
-            <div class="text_align">Respositries</div>
+            <div class="img-repo"><img src="../assets/RepositriesIcon.svg" alt=""></div>
+            <div class="text-align">Respositries</div>
             <div class="aselect ">
               <div class="selector" @click="changeRepo($event)">
                 <div class="label">
@@ -78,47 +77,7 @@
       </div>
     </div>
   </div>
-  <!-- <div>
-    <div class="forty-hours">
-      <div class="forty-hours__header">
-        <h3 class="forty-hours__title">Forty Hours</h3>
-        <input
-          type="text"
-          placeholder="organization"
-          v-model="organization"
-          @keyup.enter="fetchIssues"
-        />
-        <button @click="fetchIssues">Fetch</button>
-        <ul>
-          <li v-for="(hour, assignee) in hours" v-bind:key="assignee">
-            {{ assignee }}: current: {{ hour.current }} and previous:
-            {{ hour.previous }} hours
-          </li>
-        </ul>
-      </div>
-      <div id="vue-instance" class="form-group">
-        <select class="form-control" @change="changeRepo($event)">
-          <option value="" selected disabled>Please Select</option>
-          <option v-for="(repo, index) in repositories" :key="index">
-            {{ repo }}
-          </option>
-        </select>
-      </div>
-    </div>
-  </div>
-  <GanttChart
-    v-if="username && password && repo"
-    :username="username"
-    :password="password"
-    :repository="repo"
-  />
-  <LateTask
-    v-if="username && password"
-    :username="username"
-    :password="password"
-  /> -->
 </template>
-
 <script>
 import GanttChart from "../components/GanttChart.vue";
 import LateTask from "../components/LateTask.vue";

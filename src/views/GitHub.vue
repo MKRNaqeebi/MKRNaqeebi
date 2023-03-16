@@ -17,10 +17,9 @@
 <script>
 import FortyHours from "../components/FortyHours.vue";
 import HeaderNew from "../components/HeaderNew.vue";
-import DeveloperInfo from "../components/DeveloperInfo.vue";
 export default {
   name: "HomeView",
-  components: { FortyHours, HeaderNew, DeveloperInfo },
+  components: { FortyHours, HeaderNew },
   data() {
     return {
       username: "",
@@ -54,27 +53,27 @@ export default {
   font-family: "Montserrat";
 }
 
-.bg_color {
+.bg-color {
   background-color: #EFEDE9;
 }
 
-.num_style_open_task {
+.num-style-open-task {
   font-size: 3rem;
   color: #495175;
   text-align: center;
 }
 
-.num_style_close_task {
+.num-style-close-task {
   font-size: 3rem;
   color: #F7B696;
   text-align: center;
 }
 
-.left_border1 {
+.left-border1 {
   border-left: 10px solid #F7B696;
 }
 
-.left_border2 {
+.left-border2 {
   border-left: 10px solid #495175;
 }
 
@@ -82,12 +81,12 @@ export default {
   margin-left: 81%;
 }
 
-.img_repo {
+.img-repo {
   text-align: center;
   margin: 12px 17px;
 }
 
-.text_align {
+.text-align {
   text-align: center;
   margin: 12px 0px;
 }
