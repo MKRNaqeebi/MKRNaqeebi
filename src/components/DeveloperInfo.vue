@@ -20,8 +20,8 @@
                                     </div>
                                     <div class="arrow" :class="{ expanded: visible }"></div>
                                     <div :class="{ hidden: !visible, visible }">
-                                        <ul class="ulStyle">
-                                            <li class="liStyle" :class="{ current: item === value }" v-for="item in list"
+                                        <ul class="ul-style">
+                                            <li class="li-style" :class="{ current: item === value }" v-for="item in list"
                                                 @click="select(item)"><b>{{ item }}</b></li>
                                         </ul>
                                     </div>
@@ -69,8 +69,8 @@
                                 </div>
                                 <div class="arrow" :class="{ expanded: visibleRepo }"></div>
                                 <div :class="{ hidden: !visibleRepo, visibleRepo }">
-                                    <ul class="ulStyle">
-                                        <li class="liStyle" :class="{ current: item === valueRepo }"
+                                    <ul class="ul-style">
+                                        <li class="li-style" :class="{ current: item === valueRepo }"
                                             v-for="item in repositries" @click="selectRepo(item)"><b>{{ item }}</b></li>
                                     </ul>
                                 </div>
@@ -218,7 +218,7 @@ export default {
     color: black;
 }
 
-.ulStyle {
+.ul-style {
     width: 100%;
     list-style-type: none;
     padding: 0;
@@ -235,14 +235,14 @@ export default {
 
 }
 
-.liStyle {
+.li-style {
     padding: 12px;
     color: #495175;
     background: #F7B696;
     border-radius: 8px;
 }
 
-.liStyle:hover {
+.li-style:hover {
     color: black;
     background: #f3d2c2;
 }
