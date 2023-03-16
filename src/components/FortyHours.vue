@@ -27,7 +27,7 @@
       </div>
     </div>
   </div>
-  <GanttChart
+  <GanttChar
     v-if="username && password && repo"
     :username="username"
     :password="password"
@@ -118,10 +118,13 @@ export default {
     },
     allIssues(repos) {
       const startingDay = this.getStatingMonday();
+      
       var lastDay = new Date(startingDay);
       lastDay.setDate(lastDay.getDate() - 7);
       lastDay = lastDay.toISOString().split("T")[0];
       repos.forEach((repo) => {
+        // console.log("repo.full_name", repo.full_name);
+        // console.log("startingDay", startingDay);
         axios({
           method: "get",
           url: `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived:false+closed=${startingDay}`,

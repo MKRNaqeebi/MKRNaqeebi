@@ -67,6 +67,8 @@
                                 </div>
                             </div>
                         </div>
+                        <button class="buttonChart items-center border-0 py-1 px-3 focus:outline-none text-base mt-4 md:mt-0">Previous</button>
+                        <button class="buttonChart items-center border-0 py-1 px-3 focus:outline-none text-base mt-4 md:mt-0">Next</button>
                     </div>
                     <div>
                         <GanttChart />
@@ -169,6 +171,7 @@ export default {
     margin-left: 20px;
     width: 13rem;
     text-align: left;
+    margin-right: 45%;
 }
 
 .selector {
@@ -246,9 +249,11 @@ export default {
 .section2 {
     display: flex;
 }
-.button{
+.buttonChart{
     background-color: #F7B696;
     border-radius: 6px;
+    width: 9%;
+    margin: 0px 6px;
     /* margin:  */
 }
 </style>
