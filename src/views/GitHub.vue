@@ -33,8 +33,8 @@ export default {
   components: { FortyHours },
   data() {
     return {
-      username: "",
-      password: "",
+      username: "LaiqaRafiq",
+      password: "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",
       fetch: false,
       assignees: [
         "MKRNaqeebi",
