@@ -58,7 +58,7 @@ export default {
       issueItems: {},
       repository: "CoalAI/ganttissues",
       username: "LaiqaRafiq",
-      password: "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",
+      password: "",
     };
   },
   mounted() {
