@@ -27,37 +27,12 @@
       </div>
     </div>
   </div>
-  <!-- <GanttChart
+  <GanttChart
     v-if="username && password && repo"
     :username="username"
     :password="password"
     :repository="repo"
-  /> -->
-  <button @click="fetchIssues">Fetch</button>
-  <!-- <g-gantt-chart
-    :chart-start="'2023-02-01 01:00'"
-    :chart-end="'2023-02-03 08:00'"
-    precision="hour"
-    bar-start="'2023-02-01 01:00'"
-    bar-end="'2023-02-03 08:00'"
-  > -->
-  <g-gantt-chart
-    :chart-start="startingMonday"
-    precision="hour"
-   
-  >
-  <!-- :chart-end="end" -->
-  <!-- bar-start="beginDate"
-    bar-end="endDate" -->
-
-    <!-- <g-gantt-row
-      v-for="issue in issues"
-      :key="issue.id"
-      :label="issue.bar[0].ganttBarConfig.no"
-      :bars="issue.bar"
-    /> -->
-    <!-- .bar[0].ganttBarConfig.no" -->
-  </g-gantt-chart>
+  />
 </template>
 
 <script>
@@ -73,8 +48,6 @@ export default {
       repositories: [],
       // repo: "CoalDevInvoice",
       organization: "CoalAI",
-      // username: "LaiqaRafiq",
-      // password: "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",
     };
   },
   mounted() {
@@ -110,7 +83,6 @@ export default {
               // minus 7 days from prevMonday
               var startingMonday = new Date(prevMonday);
               startingMonday.setDate(startingMonday.getDate() - 7);
-              console.log("startingMonday", startingMonday);
               var issueClosedAt = new Date(issue.closed_at);
               if (!issue.assignee) {
                 issue.assignee = issue.assignees[0];
@@ -150,8 +122,7 @@ export default {
       lastDay.setDate(lastDay.getDate() - 7);
       lastDay = lastDay.toISOString().split("T")[0];
       repos.forEach((repo) => {
-        // console.log("repo.full_name", repo.full_name);
-        // console.log("startingDay", startingDay);
+       
         axios({
           method: "get",
           url: `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived:false+closed=${startingDay}`,
@@ -176,7 +147,7 @@ export default {
     fetchIssues() {
       let nextPage = true;
       let page = 1;
-      console.log("fetchIssues -> page", page);
+      // console.log("fetchIssues -> page", page);
       while (nextPage) {
         axios({
           method: "get",

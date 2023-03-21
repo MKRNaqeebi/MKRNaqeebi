@@ -1,6 +1,5 @@
 <template>
-  <!-- <AllOpenIssues v-if="github" /> -->
-  <GitHub v-if="github" />
+  <AllOpenIssues v-if="github" />
   <HomeView v-else />
 </template>
 
@@ -8,15 +7,13 @@
 import { mapGetters } from "vuex";
 
 import HomeView from "./views/HomeView.vue";
-import GitHub from "./views/GitHub.vue";
-// import AllOpenIssues from "./views/AllOpenIssues.vue";
+import AllOpenIssues from "./views/AllOpenIssues.vue";
 
 export default {
   name: "App",
   components: {
     HomeView,
-    GitHub,
-    // AllOpenIssues
+    AllOpenIssues
   },
   computed: {
     ...mapGetters(["github"]),
