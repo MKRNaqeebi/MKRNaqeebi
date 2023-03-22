@@ -4,10 +4,8 @@
     <g-gantt-row v-for="issue in issues" :key="issue.id" label="" :bars="issue.bar" />
   </g-gantt-chart>
 </template>
-
 <script>
 import axios from "axios";
-
 export default {
   name: "GanttChart",
   props: {

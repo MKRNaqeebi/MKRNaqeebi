@@ -31,7 +31,6 @@
           </div>
         </div>
       </div>
-
       <div class="grid grid-cols-4 gap-16">
         <div v-for="hour, assignee in hours">
           <div class="container mr-5 p-3">
@@ -109,7 +108,6 @@ export default {
     select(option) {
       this.value = option;
     },
-
     toggleRepo() {
       this.visibleRepo = !this.visibleRepo;
     },

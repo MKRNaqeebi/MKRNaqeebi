@@ -12,7 +12,6 @@
                         </div>
                         <div class="flex-1 w-8 my-3">Switch your calender view</div>
                         <div class="flex-1 w-6 ml-1">
-
                             <div class="aselect" :data-value="value" :data-list="list">
                                 <div class="selector" @click="toggle()">
                                     <div class="label">
@@ -31,7 +30,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="grid grid-cols-4 gap-16">
                 <div v-for="hour, assignee in hours">
                     <div class="container mr-5 p-3">
@@ -48,15 +46,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- <div id="vue-instance" class="form-group">
-        <select class="form-control" @change="changeRepo($event)">
-          <option value="" selected disabled>Please Select</option>
-          <option v-for="(repo, index) in repositories" :key="index">
-            {{ repo }}
-          </option>
-        </select>
-    </div> -->
             <div class="conatiner bg-white drop-shadow-lg my-5 rounded-2xl">
                 <div class=" m-3 py-3">
                     <div class="section2 ml--5">
@@ -104,7 +93,6 @@ export default {
                 { assignee: "RehmanCoaldev", openTask: '04', closeTask: '06' },
             ],
             repositries: ["Select Repository", "ABC", "Coaldev Invoice", "Coaldev Website", "XYZ"],
-
             value: 'Select',
             list: ["Select", "Monthly", "Weekly"],
             visible: false,
@@ -131,7 +119,6 @@ export default {
             this.valueRepo = option;
         }
     },
-
 }
 </script>
 <style scoped>
@@ -177,7 +164,6 @@ export default {
     margin: 12px 0px;
 }
 
-
 .aselect {
     margin-left: 20px;
     width: 13rem;
@@ -201,7 +187,6 @@ export default {
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
     border-top: 10px solid #495175;
-    ;
     transform: rotateZ(0deg) translateY(0px);
     transition-duration: 0.3s;
     transition-timing-function: cubic-bezier(.59, 1.39, .37, 1.01);
@@ -232,7 +217,6 @@ export default {
     max-height: 150px;
     overflow: hidden;
     overflow-y: auto;
-
 }
 
 .li-style {
@@ -261,5 +245,4 @@ export default {
 
 .section2 {
     display: flex;
-}
-</style>
+}</style>
