@@ -10,20 +10,6 @@ export default {
   data() {
     return {
       fetch: false,
-      assignees: [
-        "MKRNaqeebi",
-        "usama2762",
-        "1abdurRehman",
-        "ahsan-coaldev",
-        "aishatasaduq",
-        "AliHanifdev1",
-        "ammarhaider001",
-        "hamza-coaldev",
-        "LaiqaRafiq",
-        "NajamBilalDev",
-        "noumandev11",
-        "RehmanCoaldev",
-      ],
     };
   },
   methods: {

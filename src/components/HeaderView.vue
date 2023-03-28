@@ -7,7 +7,7 @@
         <nav class="md:ml-11 flex flex-wrap items-center text-base justify-center">
           <button
             @click="selectAllOpenIssues"
-            v-bind:class="this.select1 == false ? 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none text-base mt-4 md:mt-0' : 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none rounded text-base mt-4 md:mt-0 btn-select'"
+            v-bind:class="this.selectAllissues == false ? 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none text-base mt-4 md:mt-0' : 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none rounded text-base mt-4 md:mt-0 btn-select'"
           >
             Open All Issues
           </button>
@@ -15,7 +15,7 @@
         <nav class="md:ml-11 flex flex-wrap items-center text-base justify-center">
           <button
             @click="selectIssuesByRepo"
-            v-bind:class="this.select2 == false ? 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none text-base mt-4 md:mt-0' : 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none rounded text-base mt-4 md:mt-0 btn-select'"
+            v-bind:class="this.selectRepoissue == false ? 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none text-base mt-4 md:mt-0' : 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none rounded text-base mt-4 md:mt-0 btn-select'"
           >
             Issues By Repo
           </button>
@@ -23,7 +23,7 @@
         <nav class="md:ml-11 flex flex-wrap items-center text-base justify-center">
           <button
             @click="selectIssueReport"
-            v-bind:class="this.select3 == false ? 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none text-base mt-4 md:mt-0' : 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none rounded text-base mt-4 md:mt-0 btn-select'"
+            v-bind:class="this.selectReportissue == false ? 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none text-base mt-4 md:mt-0' : 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none rounded text-base mt-4 md:mt-0 btn-select'"
           >
             Issue Report
           </button>
@@ -35,29 +35,26 @@
   export default {
     data() {
       return {
-        select1: true,
-        select2: false,
-        select3: false,
+        selectAllissues: true,
+        selectRepoissue: false,
+        selectReportissue: false,
       };
     },
     methods: {
       selectAllOpenIssues() {
-        this.select1 = true;
-        this.select2 = false;
-        this.select3 = false;
-        console.log("select", this.select1);
+        this.selectAllissues = true;
+        this.selectRepoissue = false;
+        this.selectReportissue = false;
       },
       selectIssuesByRepo() {
-        this.select2 = true;
-        this.select1 = false;
-        this.select3 = false;
-        console.log("select", this.select2);
+        this.selectRepoissue = true;
+        this.selectAllissues = false;
+        this.selectReportissue = false;
       },
       selectIssueReport() {
-        this.select3 = true;
-        this.select1 = false;
-        this.select2 = false;
-        console.log("select", this.select3);
+        this.selectReportissue = true;
+        this.selectAllissues = false;
+        this.selectRepoissue = false;
       },
     },
   };
