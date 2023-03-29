@@ -9,7 +9,7 @@
               v-model="username" @keyup.enter="fetchIssues" />
           </div>
           <div>
-            <input class="border-black border ml-20 rounded-lg w-60 h-10" type="text" placeholder=" Github password"
+            <input class="border-black border ml-20 rounded-lg w-60 h-10" type="password" placeholder=" Github password"
               v-model="password" @keyup.enter="fetchIssues" />
           </div>
           <div>
