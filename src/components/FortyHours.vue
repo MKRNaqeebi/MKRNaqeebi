@@ -1,9 +1,18 @@
 <template>
   <div class="w-full h-screen">
-    <HeaderViewVue></HeaderViewVue>
+    <div  v-if="buttonClickedHide">
+     <header class="text-gray-600 body-font my-header" >
+      <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+        <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+          <img src="../assets/logo.svg" />
+        </a>
+      </div>
+      </header>
+    </div>
+    <HeaderViewVue v-if="buttonClicked"/>
     <div class="bg-color py-6 ">
       <div class="container mx-auto p-5 bg-color w-5/6">
-        <div class="flex ">
+        <div class="flex " v-if="buttonClickedHide">
           <div>
             <input class=" border-black border rounded-lg w-60 h-10" type="text" placeholder=" Github username"
               v-model="username" @keyup.enter="fetchIssues" />
@@ -17,10 +26,10 @@
               v-model="organization" @keyup.enter="fetchIssues" />
           </div>
           <div>
-            <button @click="fetchIssues" class="btn ml-10 rounded-lg w-44 border-0 h-10">Fetch</button>
+            <button @click="login" class="btn ml-10 rounded-lg w-44 border-0 h-10">Fetch</button>
           </div>
         </div>
-        <div class="flex my-5">
+        <div class="flex my-5" v-if="buttonClicked">
           <div class="flex-1 w-64">
             <p class="text-xl">Developer Info</p>
           </div>
@@ -49,7 +58,7 @@
             </div>
           </div>
         </div>
-        <div class="grid grid-cols-4 gap-16">
+        <div class="grid grid-cols-4 gap-16" v-if="buttonClicked">
           <div v-for="(hour, assignee, index) in hours">
             <div class="container mr-5 p-3">
               <div class="mb-3">{{ assignee }}</div>
@@ -65,7 +74,7 @@
             </div>
           </div>
         </div>
-        <div class="conatiner bg-white drop-shadow-lg my-5 rounded-2xl h-screen ">
+        <div class="conatiner bg-white drop-shadow-lg my-5 rounded-2xl h-screen " v-if="buttonClicked">
             <div class="gantt-div ">
               <GanttChart v-if="username && password  && repositries "
                 :username="username" 
@@ -97,14 +106,44 @@ export default {
       value: 'Select',
       list: ["Select", "Monthly", "Weekly"],
       visible: false,
+      buttonClicked: false,
+      buttonClickedHide: true,
     };
   },
   mounted() {
     this.fetchIssues();
   },
   methods: {
+    login() {
+      axios.get(`https://api.github.com/user`, {
+          auth: {
+            username: this.username,
+            password: this.password,
+          },
+        })
+        .then((response) => {
+          if(response.status===200){
+            this.fetchIssues();
+            this.loadTheTemplateAbove(); 
+            this.loadTheTemplateHide(); 
+          }
+        
+        })
+        .catch((error) => {
+          console.log("ee",error)
+          if(error.response.status===403){
+          alert("given credential is not valid!!!");
+         }
+        });
+    },
     toggle() {
       this.visible = !this.visible;
+    },
+    loadTheTemplateAbove() {
+      this.buttonClicked = !this.buttonClicked;
+    },
+    loadTheTemplateHide() {
+      this.buttonClickedHide = !this.buttonClickedHide;
     },
     select(option) {
       this.value = option;
@@ -313,5 +352,8 @@ export default {
   .btn {
     background-color: #2b3046;
     color: white;
+  }
+  .my-header {
+    background-color: #495175;
   }
 </style>

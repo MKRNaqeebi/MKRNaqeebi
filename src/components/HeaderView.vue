@@ -35,7 +35,7 @@
   export default {
     data() {
       return {
-        selectAllissues: true,
+        selectAllissues: false,
         selectRepoissue: false,
         selectReportissue: false,
       };

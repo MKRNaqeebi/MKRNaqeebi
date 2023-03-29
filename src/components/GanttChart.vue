@@ -18,9 +18,9 @@
             </div>
           </div>
         </div>
-        <button @click="fetchIssues" class="btn ml-8 rounded-lg w-24 border-0 h-12">Fetch</button>
+        <button @click="fetchIssues(); loadTheTemplateAbove();" class="btn ml-8 rounded-lg w-24 border-0 h-12">Fetch</button>
       </div>
-      <div class="my-20 gant-div">
+      <div class="my-20 gant-div" v-if="buttonClicked">
         <g-gantt-chart
           :chart-start="start"
           :chart-end="end"
@@ -62,6 +62,7 @@ export default {
       visible: false,
       valueRepo: "Select Repository",
       visibleRepo: false,
+      buttonClicked: false,
     };
   },
   mounted() {
@@ -70,6 +71,9 @@ export default {
   methods: {
     toggleRepo() {
       this.visibleRepo = !this.visibleRepo;
+    },
+    loadTheTemplateAbove() {
+      this.buttonClicked = !this.buttonClicked;
     },
     changeRepo(event) {
       this.repo = event.target.value;
