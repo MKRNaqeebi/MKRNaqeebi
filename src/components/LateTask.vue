@@ -49,7 +49,6 @@
           temp.bar = [{}];
           issue.labels.forEach((label) => {
             try {
-              console.log("Label Date", label.name);
               if (label.name.length == 8 && /^\d+$/.test(label.name)) {
                 const endDate = label.name.replace(
                   /(\d{4})(\d{2})(\d{2})/,
