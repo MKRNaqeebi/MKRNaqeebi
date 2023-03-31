@@ -2,9 +2,9 @@
   <div>
     <div class="m-3 py-3">
       <div class="flex ml--5">
-        <div class="img-repo"><img src="../assets/RepositriesIcon.svg" alt=""></div>
-        <div class="text-align">Respositries</div>
-        <div class="as-elect " :data-value="valueRepo" :data-list="repositries">
+        <div class="img-repo"><img src="../assets/RepositoriesIcon.svg" alt=""></div>
+        <div class="text-align">Repositories</div>
+        <div class="as-elect " :data-value="valueRepo" :data-list="repositories">
           <div class="selector" @click="toggleRepo()">
             <div class="label">
               <h4 class="text-lg">{{ valueRepo }}</h4>
@@ -12,7 +12,7 @@
             <div class="arrow" :class="{ expanded: visibleRepo }"></div>
             <div :class="{ hidden: !visibleRepo, visibleRepo }">
               <ul class="ul-style">
-                <li class="li-style" :class="{ current: item === valueRepo }" v-for="item in this.repositries"
+                <li class="li-style" :class="{ current: item === valueRepo }" v-for="item in this.repositories"
                   @click="selectRepo(item)"><b>{{ item }}</b></li>
               </ul>
             </div>
@@ -20,7 +20,7 @@
         </div>
         <button @click="fetchIssues(); loadTheTemplateAbove();" class="btn ml-8 rounded-lg w-24 border-0 h-12">Fetch</button>
       </div>
-      <div class="my-20 gant-div" v-if="buttonClicked">
+      <div class="my-20 gantt-div" v-if="buttonClicked">
         <g-gantt-chart
           :chart-start="start"
           :chart-end="end"
@@ -51,8 +51,7 @@ export default {
     password: {
       type: String,
     },
-    repositries: [
-  ],
+    repositories: [],
   },
   data() {
     return {
@@ -142,9 +141,7 @@ export default {
       });
       this.issues = tempIssues;
     },
-    
     fetchIssues() {
-      console.log("hh", this.valueRepo)
       axios({
         method: "get",
         url: `https://api.github.com/repos/${this.valueRepo}/issues?state=open`,
@@ -233,7 +230,6 @@ export default {
   background: #F7B696;
   border-radius: 8px;
 }
-
 .li-style:hover {
   color: black;
   background: #f3d2c2;
@@ -244,7 +240,7 @@ export default {
 .hidden {
   visibility: hidden;
 }
-.gant-div{
+.gantt-div{
   position: absolute;
   left: 0px;
   top: 0px;
