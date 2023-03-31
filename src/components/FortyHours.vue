@@ -110,9 +110,6 @@ export default {
       buttonClickedHide: true,
     };
   },
-  mounted() {
-    this.fetchIssues();
-  },
   methods: {
     login() {
       axios.get(`https://api.github.com/user`, {

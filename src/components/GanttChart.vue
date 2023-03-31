@@ -65,9 +65,6 @@ export default {
       buttonClicked: false,
     };
   },
-  mounted() {
-    this.fetchIssues();
-  },
   methods: {
     toggleRepo() {
       this.visibleRepo = !this.visibleRepo;
