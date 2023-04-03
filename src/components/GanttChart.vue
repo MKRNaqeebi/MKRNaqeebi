@@ -51,7 +51,9 @@ export default {
     password: {
       type: String,
     },
-    repositories: [],
+    repositories: {
+      type: Array,
+    }
   },
   data() {
     return {
