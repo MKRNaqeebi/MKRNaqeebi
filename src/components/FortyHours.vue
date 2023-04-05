@@ -103,8 +103,8 @@ export default {
       hours: {},
       repositories: [],
       organization: "",
-      value: 'Select',
-      list: ["Select", "Monthly", "Weekly"],
+      value: 'Weekly',
+      list: ['Weekly', 'Monthly'],
       visible: false,
       buttonClicked: false,
       buttonClickedHide: true,
@@ -145,6 +145,18 @@ export default {
     select(option) {
       this.value = option;
     },
+    select(item) {
+      this.value = item;
+      this.visible = false;
+      if (item === 'Monthly') {
+        this.hours={}
+        this.fetchIssues(); 
+      }
+      if (item === 'Weekly') {
+        this.hours={}
+        this.fetchIssues(); 
+      }
+    },
     getPreviousMonday() {
       var prevMonday = new Date();
       prevMonday.setDate(prevMonday.getDate() - ((prevMonday.getDay() + 6) % 7));
@@ -157,7 +169,7 @@ export default {
       startingDay = startingDay.toISOString().split("T")[0];
       return startingDay;
     },
-    formateIssue(issues) {
+    formateIssueWeekly(issues) {
       issues.forEach((issue) => {
         if (issue.labels.length < 1) return;
         // check if issue is closed before last Monday
@@ -195,28 +207,93 @@ export default {
         });
       });
     },
-    allIssues(repos) {
-      const startingDay = this.getStatingMonday();
-      var lastDay = new Date(startingDay);
-      lastDay.setDate(lastDay.getDate() - 7);
-      lastDay = lastDay.toISOString().split("T")[0];
-      repos.forEach((repo) => {
-        axios({
-          method: "get",
-          url: `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived:false+closed=${startingDay}`,
-          auth: {
-            username: this.username,
-            password: this.password,
-          },
-        })
-          .then((response) => {
-            this.formateIssue(response.data);
-          })
-          .catch((error) => {
+    formateIssueMonthly(issues) {
+      issues.forEach((issue) => {
+        if (issue.labels.length < 1) return;
+        // check if issue is closed before last Monday
+        issue.labels.forEach((label) => {
+          try {
+            label.name = label.name.replace("hrs", "");
+            if (label.name.length < 3 && /^\d+$/.test(label.name)) {
+              var today = new Date();
+              const currentMonth =  new Date(today.getFullYear(), today.getMonth() + 1, 0);
+              const prveMonth = new Date(currentMonth );
+              prveMonth.setDate(currentMonth.getDate() - 30);
+              var issueClosedAt = new Date(issue.closed_at);
+              if (!issue.assignee) {
+                issue.assignee = issue.assignees[0];
+              }
+              if (!issue.assignee) return;
+              if (!this.hours[issue.assignee.login.toLowerCase()]) {
+                this.hours[issue.assignee.login.toLowerCase()] = {
+                  current: 0,
+                  previous: 0,
+                  next: 0,
+                };
+              }
+              if (issueClosedAt >= prveMonth && issueClosedAt <= currentMonth ) {
+            this.hours[issue.assignee.login.toLowerCase()]["previous"] += parseInt(label.name);
+          }
+          if (issueClosedAt >= currentMonth) {
+            this.hours[issue.assignee.login.toLowerCase()]["current"] += parseInt(label.name);
+          }
+            }
+          } catch (error) {
             console.log(error);
-          });
+            console.log(issue.html_url);
+          }
+        });
       });
     },
+    allIssues(repositories) {
+      if (!repositories) {
+    console.error('Error: repos is undefined.');
+    return;
+  }
+  if (this.value === "Weekly") {
+    const startingDay = this.getStatingMonday();
+  var lastDay = new Date(startingDay);
+    lastDay.setDate(lastDay.getDate() - 7); // set last day to one week ago
+    repositories.forEach((repo) => {
+    axios({
+      method: "get",
+      url: `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived:false&+closed=${startingDay}`,
+      auth: {
+        username: this.username,
+        password: this.password,
+      },
+    })
+      .then((response) => {
+        this.formateIssueWeekly(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+  } else if (this.value === "Monthly") {
+      var today = new Date(); // create a new Date object with today's date
+      var firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1); // create a new Date object with the first day of the current month
+      var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0); // create a new Date object with the last day of the current month
+      firstDayOfMonth = firstDayOfMonth.toISOString().split("T")[0];
+      lastDayOfMonth = lastDayOfMonth.toISOString().split("T")[0]; 
+      repositories.forEach((repo) => {
+    axios({
+      method: "get",
+      url: `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived:false&+closed=${firstDayOfMonth}..closed=${lastDayOfMonth}`,
+      auth: {
+        username: this.username,
+        password: this.password,
+      },
+    })
+      .then((response) => {
+        this.formateIssueMonthly(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+}
+   },
     allRepo(repos) {
       repos.forEach((repo) => {
         this.repositories.push(repo.full_name);
