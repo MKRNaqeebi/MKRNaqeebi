@@ -101,18 +101,16 @@ export default {
       username: "",
       password: "",
       hours: {},
-      organization: "",
       repositories: [],
+      organization: "",
       value: 'Weekly',
       list: ['Weekly', 'Monthly'],
-      visible: false, 
+      visible: false,
       buttonClicked: false,
       buttonClickedHide: true,
     };
   },
-
   methods: {
-   
     login() {
       axios.get(`https://api.github.com/user`, {
           auth: {
@@ -201,7 +199,6 @@ export default {
               if (issueClosedAt >= prevMonday) {
                 this.hours[issue.assignee.login.toLowerCase()]["current"] += parseInt(label.name);
               }
-             
             }
           } catch (error) {
             console.log(error);
@@ -279,8 +276,6 @@ export default {
       var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0); // create a new Date object with the last day of the current month
       firstDayOfMonth = firstDayOfMonth.toISOString().split("T")[0];
       lastDayOfMonth = lastDayOfMonth.toISOString().split("T")[0]; 
-      console.log("firstDayOfMonth",firstDayOfMonth)
-      console.log("lastDayOfMonth",lastDayOfMonth)
       repositories.forEach((repo) => {
     axios({
       method: "get",
