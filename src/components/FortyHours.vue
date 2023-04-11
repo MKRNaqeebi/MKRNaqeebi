@@ -2,15 +2,45 @@
   <div class="w-full h-screen">
     <div  v-if="buttonClickedHide">
      <header class="text-gray-600 body-font my-header" >
-      <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+      <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center" >
         <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
           <img src="../assets/logo.svg" />
         </a>
       </div>
       </header>
     </div>
-    <HeaderViewVue v-if="buttonClicked"/>
-    <div class="bg-color py-6 ">
+    <header class="text-gray-600 body-font my-header"  v-if="buttonClickedHeader">
+      <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+        <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+          <img src="../assets/logo.svg" @click="resetButtonClicked" />
+        </a>
+        <nav class="md:ml-11 flex flex-wrap items-center text-base justify-center">
+          <button
+            @click="selectAllOpenIssues();"
+            v-bind:class="this.selectAllIssues == false ? 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none text-base mt-4 md:mt-0' : 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none rounded text-base mt-4 md:mt-0 btn-select'"
+          >
+            Open All Issues
+          </button>
+        </nav>
+        <nav class="md:ml-11 flex flex-wrap items-center text-base justify-center">
+          <button
+            @click="selectIssuesByRepo"
+            v-bind:class="this.selectRepoIssue == false ? 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none text-base mt-4 md:mt-0' : 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none rounded text-base mt-4 md:mt-0 btn-select'"
+          >
+            Issues By Repo
+          </button>
+        </nav>
+        <nav class="md:ml-11 flex flex-wrap items-center text-base justify-center">
+          <button
+            @click="selectIssueReport"
+            v-bind:class="this.selectReportIssue == false ? 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none text-base mt-4 md:mt-0' : 'button inline-flex items-center border-0 py-1 px-3 focus:outline-none rounded text-base mt-4 md:mt-0 btn-select'"
+          >
+            Issue Report
+          </button>
+        </nav>
+      </div>
+    </header>
+    <div class="bg-color py-6 " >
       <div class="container mx-auto p-5 bg-color w-5/6">
         <div class="flex " v-if="buttonClickedHide">
           <div>
@@ -29,6 +59,7 @@
             <button @click="login" class="btn ml-10 rounded-lg w-44 border-0 h-10">Fetch</button>
           </div>
         </div>
+        <div >
         <div class="flex my-5" v-if="buttonClicked">
           <div class="flex-1 w-64">
             <p class="text-xl">Developer Info</p>
@@ -85,32 +116,102 @@
       </div>
     </div>
   </div>
+  <div v-show="selectReportIssue">
+    <div class="bg-color py-6 " >
+      <div class="container mx-auto p-5 bg-color w-5/6">
+        <div class="flex z-10 ml-52" style="margin-top: -80px;">
+        <div class="mb-6 flex">
+          <div>
+            <labe >Start Date:</labe> 
+            <input class="ml-6"  type="date" v-model="startDate"  @keyup.enter="fetchAllIssuess" >
+          </div>
+          <div class="ml-20">
+            <labe >End Date:</labe>
+            <input class="ml-6"  type="date" v-model="endDate"  @keyup.enter="fetchAllIssuess" >
+          </div>
+        </div>
+          <div>
+            <button   style="margin-top: -10px; " @click="fetchAllIssuess" class="btn ml-20 rounded-lg w-44 border-0 h-10">Fetch</button>
+          </div>
+        </div>
+   <div class="grid grid-cols-4 gap-16">
+   <div v-for="(Hour, assignee, index) in Hours">
+    <div class="container mr-5 p-3">
+      <div class="mb-3">{{ assignee }}</div>
+      <div class="bg-white rounded-2xl drop-shadow-lg"
+        v-bind:class="index % 2 == 0 ? 'left-border1' : 'left-border2'">
+        <div class="grid grid-cols-2 gap-0 rounded-2xl">
+          <div class="pt-3 text-center">Closed Task</div>
+          <div class="num-style-close-task">{{ Hour.closedTasks }}</div>
+          <div class="pt-3 text-center">Closed Task Hours</div>
+          <div class="num-style-close-task">{{ Hour.closedHours }}</div>
+          <div class="pt-3 text-center">Open Task</div>
+          <div class="num-style-close-task">{{ Hour.openTasks }}</div>
+          <div class="pt-3 text-center">open Task hours</div>
+          <div class="num-style-close-task">{{ Hour.openHours }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+</div>
+</div>
+  </div>
 </template>
 
 <script>
 import GanttChart from "../components/GanttChart.vue";
 import LateTask from "../components/LateTask.vue";
-import HeaderViewVue from "./HeaderView.vue";
 import axios from "axios";
-
 export default {
   name: "FORTY",
-  components: { GanttChart, LateTask, HeaderViewVue },
+  components: { GanttChart, LateTask, },
   data() {
     return {
       username: "",
       password: "",
+      startDate:null,
+      endDate:null,
       hours: {},
+      Hours:{},
       repositories: [],
       organization: "",
       value: 'Weekly',
       list: ['Weekly', 'Monthly'],
       visible: false,
       buttonClicked: false,
+      buttonClickedHeader: false,
       buttonClickedHide: true,
+      selectAllIssues: false,
+      selectRepoIssue: false,
+      selectReportIssue: false,
     };
   },
   methods: {
+    selectAllOpenIssues() {
+        this.selectAllIssues = true;
+        this.selectRepoIssue = false;
+        this.selectReportIssue = false;
+      },
+  
+      selectIssuesByRepo() {
+        this.selectRepoIssue = true;
+        this.selectAllIssues = false;
+        this.selectReportIssue = false;
+      },
+      selectIssueReport() {
+        this.selectReportIssue = true;
+        this.selectAllIssues = false;
+        this.selectRepoIssue = false;
+        this.buttonClicked = false
+      },
+      resetButtonClicked() {
+      this.buttonClicked = true
+      this.selectReportIssue = false;
+      this.selectAllIssues = false;
+      this.selectRepoIssue = false;
+    },
     login() {
       axios.get(`https://api.github.com/user`, {
           auth: {
@@ -123,6 +224,7 @@ export default {
             this.fetchIssues();
             this.loadTheTemplateAbove(); 
             this.loadTheTemplateHide(); 
+            this.loadTheTemplate()
           }
         
         })
@@ -138,6 +240,9 @@ export default {
     },
     loadTheTemplateAbove() {
       this.buttonClicked = !this.buttonClicked;
+    },
+    loadTheTemplate() {
+      this.buttonClickedHeader = !this.buttonClickedHeader;
     },
     loadTheTemplateHide() {
       this.buttonClickedHide = !this.buttonClickedHide;
@@ -229,6 +334,7 @@ export default {
                   current: 0,
                   previous: 0,
                   next: 0,
+
                 };
               }
               if (issueClosedAt >= prveMonth && issueClosedAt <= currentMonth ) {
@@ -237,6 +343,54 @@ export default {
           if (issueClosedAt >= currentMonth) {
             this.hours[issue.assignee.login.toLowerCase()]["current"] += parseInt(label.name);
           }
+            }
+          } catch (error) {
+            console.log(error);
+            console.log(issue.html_url);
+          }
+        });
+      });
+    },
+    formateIssue(issues) {
+      console.log("isi",issues)
+      issues.forEach((issue) => {
+        if (issue.labels.length < 1) return;
+        // check if issue is closed before last Monday
+        issue.labels.forEach((label) => {
+          try {
+            label.name = label.name.replace("hrs", "");
+            if (label.name.length < 3 && /^\d+$/.test(label.name)) {
+              var today = new Date();
+              const currentMonth =new Date(this.endDate)
+              const prveMonth =new Date(this.startDate)
+              var issueClosedAt = new Date(issue.closed_at);
+              var issueCreatedAt = new Date(issue.created_at);
+              if (!issue.assignee) {
+                issue.assignee = issue.assignees[0];
+              }
+              if (!issue.assignee) return;
+              if (!this.Hours[issue.assignee.login.toLowerCase()]) {
+                this.Hours[issue.assignee.login.toLowerCase()] = {
+                  closedHours: 0,
+                  openHours: 0,
+                  closedTasks:0,
+                  openTasks:0,
+                  next: 0,
+                };
+              }
+                if (issueClosedAt >= prveMonth && issueClosedAt <= currentMonth ) {
+                 this.Hours[issue.assignee.login.toLowerCase()]["closedHours"] += parseInt(label.name);
+             }
+               if (issueCreatedAt >= prveMonth && issueCreatedAt <= currentMonth ) {
+                this.Hours[issue.assignee.login.toLowerCase()]["openHours"] += parseInt(label.name);
+             }
+               // increment the number of closed tasks for the assignee
+              if (issue.state == 'closed'&& issueClosedAt >= prveMonth && issueClosedAt <= currentMonth ) {
+                 this.Hours[issue.assignee.login.toLowerCase()].closedTasks++;
+                }
+              if (issue.state == 'open'&& issueCreatedAt >= prveMonth && issueCreatedAt<= currentMonth ) {
+                 this.Hours[issue.assignee.login.toLowerCase()].openTasks++;
+                }
             }
           } catch (error) {
             console.log(error);
@@ -294,6 +448,44 @@ export default {
   });
 }
    },
+   selectIssue(repositories) {
+  var firstDate = this.startDate;
+  var lastDate = this.endDate;
+  repositories.forEach((repo) => {
+    // Fetch closed issues
+    axios({
+      method: "get",
+      url: `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived=false&closed=${firstDate}..${lastDate}`,
+      auth: {
+        username: this.username,
+        password: this.password,
+      },
+    })
+      .then((response) => {
+        this.formateIssue(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    // Fetch open issues
+    axios({
+      method: "get",
+      url: `https://api.github.com/repos/${repo.full_name}/issues?state=open&archived=false&created=${firstDate}..${lastDate}`,
+      auth: {
+        username: this.username,
+        password: this.password,
+      },
+    })
+      .then((response) => {
+        this.formateIssue(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+},
+
     allRepo(repos) {
       repos.forEach((repo) => {
         this.repositories.push(repo.full_name);
@@ -331,13 +523,56 @@ export default {
         }
       }
     },
+    fetchAllIssuess() {
+      this.Hours = {};
+      let nextPage = true;
+      let page = 1;
+      while (nextPage) {
+        axios({
+          method: "get",
+          url: `https://api.github.com/orgs/${this.organization}/repos?&page=${page}&per_page=100`,
+          auth: {
+            username: this.username,
+            password: this.password,
+          },
+        })
+          .then((response) => {
+            this.selectIssue(response.data)
+            if (response.data.length < 1) {
+              nextPage = false;
+              return;
+            }
+          })
+          .catch((error) => {
+            nextPage = false;
+            console.log(error);
+            return;
+          });
+        page++;
+        if (page > 5) {
+          nextPage = false;
+          return;
+        }
+      }
+    },
   },
 };
 </script>
 <style scoped>
-  * {
-    font-family: "Montserrat";
-  }
+* {
+  font-family: "Montserrat";
+}
+.my-header {
+  background-color: #495175;
+}
+button {
+  color: white;
+}
+.btn-select {
+  color: black;
+  background-color: #F7B696;
+  border-radius: 20px;
+}
   .bg-color {
     background-color: #EFEDE9;
   }
