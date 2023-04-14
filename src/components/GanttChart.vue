@@ -22,7 +22,7 @@
       </div>
       <div>
         <div class="my-2.5">
-          <div ref="gantt" class="gantt-container" id="gantt_chart_container"></div>
+          <div ref="gantt" class="gantt-container" id="gantt-chart-container"></div>
         </div>
       </div>
     </div>
@@ -93,7 +93,6 @@ export default {
       })
         .then((response) => {
           const issues = response.data;
-          console.log("issues", issues)
           issues.forEach((issue) => {
             let endDate;
             var hours = 1;
@@ -107,10 +106,8 @@ export default {
                   endDate = label.name.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
                 }
               });
-              console.log("endDate", endDate)
             }
             const today = moment().format("YYYY-MM-DD");
-            console.log(" today", today)
             if (endDate && endDate < today) {
               this.tasks.push({
                 id: issue.number,
@@ -157,7 +154,6 @@ export default {
           });
 
           gantt.config.drag_mode = "resize";
-          console.log(JSON.parse(JSON.stringify(this.tasks)));
           gantt.clearAll();
           gantt.parse({ data: this.tasks });
           gantt.render();
