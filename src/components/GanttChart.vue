@@ -25,7 +25,7 @@
           <div ref="gantt" class="gantt-container" id="gantt_chart_container"></div>
         </div>
       </div>
-    </div> 
+    </div>
   </div>
 </template>
 
@@ -60,120 +60,118 @@ export default {
     };
   },
   watch: {
-  valueRepo(newVal, oldVal) {
-    // Call fetchIssues method again when valueRepo property changes
-    this.fetchIssues();
-  }
-},
-  mounted() { 
-},
-methods: {
-  toggleRepo() {
-    this.visibleRepo = !this.visibleRepo;
+    valueRepo(newVal, oldVal) {
+      // Call fetchIssues method again when valueRepo property changes
+      this.fetchIssues();
+    }
   },
-  loadTheTemplateAbove() {
-    this.buttonClicked = !this.buttonClicked;
+  mounted() {
   },
-  changeRepo(event) {
-    this.repo = event.target.value;
-    this.visibleRepo = !this.visibleRepo;
-  },
-  selectRepo(option) {
-    this.valueRepo = option;
-  },
-  fetchIssues() {
-    this.tasks = []; // clear previous tasks
-    axios({
-      method: "get",
-      url: `https://api.github.com/repos/${this.valueRepo}/issues?state=open`,
-      auth: {
-        username: this.username,
-        password: this.password,
-      },
-    })
-      .then((response) => {
-        const issues = response.data;
-        console.log("issues", issues)
-        issues.forEach((issue) => {
-          let endDate; 
-          var hours = 1;
-          const startDate = moment(issue.created_at, "YYYY-MM-DDTHH:mm:ssZ").format("YYYY-MM-DD");
-          if (issue.labels && Array.isArray(issue.labels)) {
-            issue.labels.forEach((label) => {
-              if (label.name.length < 3 && /^\d+$/.test(label.name)) {
-                hours = parseInt(label.name);
-              }
-              if (label.name.length == 8 && /^\d+$/.test(label.name)) {
-                endDate = label.name.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
-              }
-            });
-            console.log("endDate", endDate)
-          }
-          const today=  moment().format("YYYY-MM-DD");
-          console.log(" today",  today)
-          if (endDate && endDate < today) {
-            this.tasks.push({
-              id: issue.number,
-              text: issue.number,
-              start_date: startDate,
-              duration: hours,
-              time: hours,
-              open: false,
-              color: "red"
-            });
-          }
-          if (endDate && endDate > today) {
-            this.tasks.push({
-              id: issue.number,
-              text: issue.number,
-              start_date: startDate,
-              duration: hours,
-              time: hours,
-              open: false,
-              color: "green"
-            });
-          }
-        });
-        gantt.templates.timeline_cell_class = function(task,date){
-          if(date.getDay()==0||date.getDay()==6){
-            return "weekend";
-          }
-        };
-        gantt.config.columns = [
-          {name:"id", label:"Task name",  width: 144, tree:true },
-          {name:"time", label:"time", align: "center", },
-        ];
-        gantt.config.date_format = "%Y-%m-%d";
-        gantt.config.duration_step = 1;
-        gantt.config.work_time = true;
-        gantt.config.duration_unit = "hour";
-        gantt.config.workday = {
-          hours: 8,
-        }; 
-        gantt.init(this.$refs.gantt, {
-          width: 1000,
-          height: 600,
-          autofit: true
-        });
-
-        gantt.config.drag_mode = "resize";
-        console.log(JSON.parse(JSON.stringify(this.tasks)));
-        gantt.clearAll();
-        gantt.parse({ data: this.tasks });
-        gantt.render();
-        var style = document.createElement("style");
-        style.innerHTML = ".weekend {  background: #f4f7f4!important  }";
-        document.getElementsByTagName("head")[0].appendChild(style);
+  methods: {
+    toggleRepo() {
+      this.visibleRepo = !this.visibleRepo;
+    },
+    loadTheTemplateAbove() {
+      this.buttonClicked = !this.buttonClicked;
+    },
+    changeRepo(event) {
+      this.repo = event.target.value;
+      this.visibleRepo = !this.visibleRepo;
+    },
+    selectRepo(option) {
+      this.valueRepo = option;
+    },
+    fetchIssues() {
+      this.tasks = []; // clear previous tasks
+      axios({
+        method: "get",
+        url: `https://api.github.com/repos/${this.valueRepo}/issues?state=open`,
+        auth: {
+          username: this.username,
+          password: this.password,
+        },
       })
-      .catch((error) => {
-        console.error(error);
-      });
-  },
-},
+        .then((response) => {
+          const issues = response.data;
+          console.log("issues", issues)
+          issues.forEach((issue) => {
+            let endDate;
+            var hours = 1;
+            const startDate = moment(issue.created_at, "YYYY-MM-DDTHH:mm:ssZ").format("YYYY-MM-DD");
+            if (issue.labels && Array.isArray(issue.labels)) {
+              issue.labels.forEach((label) => {
+                if (label.name.length < 3 && /^\d+$/.test(label.name)) {
+                  hours = parseInt(label.name);
+                }
+                if (label.name.length == 8 && /^\d+$/.test(label.name)) {
+                  endDate = label.name.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
+                }
+              });
+              console.log("endDate", endDate)
+            }
+            const today = moment().format("YYYY-MM-DD");
+            console.log(" today", today)
+            if (endDate && endDate < today) {
+              this.tasks.push({
+                id: issue.number,
+                text: issue.number,
+                start_date: startDate,
+                duration: hours,
+                time: hours,
+                open: false,
+                color: "red"
+              });
+            }
+            if (endDate && endDate > today) {
+              this.tasks.push({
+                id: issue.number,
+                text: issue.number,
+                start_date: startDate,
+                duration: hours,
+                time: hours,
+                open: false,
+                color: "green"
+              });
+            }
+          });
+          gantt.templates.timeline_cell_class = function (task, date) {
+            if (date.getDay() == 0 || date.getDay() == 6) {
+              return "weekend";
+            }
+          };
+          gantt.config.columns = [
+            { name: "id", label: "Task name", width: 144, tree: true },
+            { name: "time", label: "time", align: "center", },
+          ];
+          gantt.config.date_format = "%Y-%m-%d";
+          gantt.config.duration_step = 1;
+          gantt.config.work_time = true;
+          gantt.config.duration_unit = "hour";
+          gantt.config.workday = {
+            hours: 8,
+          };
+          gantt.init(this.$refs.gantt, {
+            width: 1000,
+            height: 600,
+            autofit: true
+          });
 
+          gantt.config.drag_mode = "resize";
+          console.log(JSON.parse(JSON.stringify(this.tasks)));
+          gantt.clearAll();
+          gantt.parse({ data: this.tasks });
+          gantt.render();
+          var style = document.createElement("style");
+          style.innerHTML = ".weekend {  background: #f4f7f4!important  }";
+          document.getElementsByTagName("head")[0].appendChild(style);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+  },
 };
 </script>
-
 <style scoped>
 .btn {
   background-color: #2b3046;
@@ -261,10 +259,12 @@ methods: {
   right:0px;
   z-index: -1;
 }
+
 .weekend {
   background: #f4f7f4 !important;
 }
-#gantt_chart_container {
+
+#gantt-chart-container {
   width: 100%;
   height: 500px;
 }
