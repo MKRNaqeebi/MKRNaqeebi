@@ -20,28 +20,21 @@
         </div>
         <button @click="fetchIssues(); loadTheTemplateAbove();" class="btn ml-8 rounded-lg w-24 border-0 h-12">Fetch</button>
       </div>
-      <div class="my-20 gantt-div" v-if="buttonClicked">
-        <g-gantt-chart
-          :chart-start="start"
-          :chart-end="end"
-          precision="hour"
-          bar-start="beginDate"
-          bar-end="endDate"
-        >
-          <g-gantt-row
-            v-for="issue in issues"
-            :key="issue.id"
-            label=""
-            :bars="issue.bar"
-          />
-        </g-gantt-chart>
+      <div>
+        <div class="my-2.5">
+          <div ref="gantt" class="gantt-container" id="gantt-chart-container"></div>
+        </div>
       </div>
-    </div> 
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import "dhtmlx-gantt";
+import { gantt } from "dhtmlx-gantt";
+import "dhtmlx-gantt/codebase/dhtmlxgantt.css";
+import moment from "moment";
 export default {
   name: "GanttChart",
   props: {
@@ -59,12 +52,20 @@ export default {
     return {
       start: "",
       end: "",
-      issues: [],
+      tasks: [],
       visible: false,
       valueRepo: "Select Repository",
       visibleRepo: false,
       buttonClicked: false,
     };
+  },
+  watch: {
+    valueRepo(newVal, oldVal) {
+      // Call fetchIssues method again when valueRepo property changes
+      this.fetchIssues();
+    }
+  },
+  mounted() {
   },
   methods: {
     toggleRepo() {
@@ -80,67 +81,8 @@ export default {
     selectRepo(option) {
       this.valueRepo = option;
     },
-    formateIssue(issues) {
-      let tempIssues = [];
-      issues.forEach((issue) => {
-        if (issue.labels.length < 1) return;
-        let temp = {};
-        temp.title = issue.title;
-        temp.id = issue.id;
-        temp.bar = [{}];
-        issue.labels.forEach((label) => {
-          try {
-            if (label.name.length == 8 && /^\d+$/.test(label.name)) {
-              const endDate = label.name.replace(
-                /(\d{4})(\d{2})(\d{2})/,
-                "$1-$2-$3 00:00"
-              );
-              var hours = 2;
-              issue.labels.forEach((label) => {
-                if (label.name.length < 3 && /^\d+$/.test(label.name)) {
-                  hours = parseInt(label.name);
-                }
-              });
-              temp.bar[0].endDate = endDate;
-              let beginDate = new Date(endDate);
-              // minus hours from myBeginDate
-              beginDate.setHours(beginDate.getHours() - hours);
-              // convert myBeginDate to string
-              beginDate = beginDate.toISOString();
-              temp.bar[0].beginDate = beginDate.replace(
-                /(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).*/,
-                "$1-$2-$3 $4:$5"
-              );
-              if (this.start == "") {
-                this.start = temp.bar[0].beginDate;
-              }
-              if (this.end == "") {
-                this.end = temp.bar[0].endDate;
-              }
-              if (this.start > temp.bar[0].beginDate) {
-                this.start = temp.bar[0].beginDate;
-              }
-              if (this.end < temp.bar[0].endDate) {
-                this.end = temp.bar[0].endDate;
-              }
-              temp.bar[0].ganttBarConfig = {};
-              temp.bar[0].ganttBarConfig.id = issue.id;
-              temp.bar[0].ganttBarConfig.label = `#${issue.number} ${issue.title}`;
-              // if end date is less than current date, set bar color to red
-              if (new Date(endDate) < new Date()) {
-                temp.bar[0].ganttBarConfig.style = {};
-                temp.bar[0].ganttBarConfig.style.background = "red";
-              }
-              tempIssues.push(temp);
-            }
-          } catch (error) {
-            console.log(error);
-          }
-        });
-      });
-      this.issues = tempIssues;
-    },
     fetchIssues() {
+      this.tasks = []; // clear previous tasks
       axios({
         method: "get",
         url: `https://api.github.com/repos/${this.valueRepo}/issues?state=open`,
@@ -150,10 +92,77 @@ export default {
         },
       })
         .then((response) => {
-          this.formateIssue(response.data);
+          const issues = response.data;
+          issues.forEach((issue) => {
+            let endDate;
+            var hours = 1;
+            const startDate = moment(issue.created_at, "YYYY-MM-DDTHH:mm:ssZ").format("YYYY-MM-DD");
+            if (issue.labels && Array.isArray(issue.labels)) {
+              issue.labels.forEach((label) => {
+                if (label.name.length < 3 && /^\d+$/.test(label.name)) {
+                  hours = parseInt(label.name);
+                }
+                if (label.name.length == 8 && /^\d+$/.test(label.name)) {
+                  endDate = label.name.replace(/(\d{4})(\d{2})(\d{2})/, "$1-$2-$3");
+                }
+              });
+            }
+            const today = moment().format("YYYY-MM-DD");
+            if (endDate && endDate < today) {
+              this.tasks.push({
+                id: issue.number,
+                text: issue.number,
+                start_date: startDate,
+                duration: hours,
+                time: hours,
+                open: false,
+                color: "red"
+              });
+            }
+            if (endDate && endDate > today) {
+              this.tasks.push({
+                id: issue.number,
+                text: issue.number,
+                start_date: startDate,
+                duration: hours,
+                time: hours,
+                open: false,
+                color: "green"
+              });
+            }
+          });
+          gantt.templates.timeline_cell_class = function (task, date) {
+            if (date.getDay() == 0 || date.getDay() == 6) {
+              return "weekend";
+            }
+          };
+          gantt.config.columns = [
+            { name: "id", label: "Task name", width: 144, tree: true },
+            { name: "time", label: "time", align: "center", },
+          ];
+          gantt.config.date_format = "%Y-%m-%d";
+          gantt.config.duration_step = 1;
+          gantt.config.work_time = true;
+          gantt.config.duration_unit = "hour";
+          gantt.config.workday = {
+            hours: 8,
+          };
+          gantt.init(this.$refs.gantt, {
+            width: 1000,
+            height: 600,
+            autofit: true
+          });
+
+          gantt.config.drag_mode = "resize";
+          gantt.clearAll();
+          gantt.parse({ data: this.tasks });
+          gantt.render();
+          var style = document.createElement("style");
+          style.innerHTML = ".weekend {  background: #f4f7f4!important  }";
+          document.getElementsByTagName("head")[0].appendChild(style);
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
     },
   },
@@ -245,5 +254,14 @@ export default {
   top: 0px;
   right:0px;
   z-index: -1;
+}
+
+.weekend {
+  background: #f4f7f4 !important;
+}
+
+#gantt-chart-container {
+  width: 100%;
+  height: 500px;
 }
 </style>
