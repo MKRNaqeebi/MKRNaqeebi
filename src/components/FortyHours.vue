@@ -2,7 +2,7 @@
   <div class="w-full h-screen">
     <div  v-if="buttonClickedHide">
      <header class="text-gray-600 body-font my-header" >
-      <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center" >
+      <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
         <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
           <img src="../assets/logo.svg" />
         </a>
@@ -59,7 +59,7 @@
             <button @click="login" class="btn ml-10 rounded-lg w-44 border-0 h-10">Fetch</button>
           </div>
         </div>
-        <div >
+        <div>
         <div class="flex my-5" v-if="buttonClicked">
           <div class="flex-1 w-64">
             <p class="text-xl">Developer Info</p>
@@ -120,43 +120,43 @@
     <div class="bg-color py-6 " >
       <div class="container mx-auto p-5 bg-color w-5/6">
         <div class="flex z-10 ml-52" style="margin-top: -80px;">
-        <div class="mb-6 flex">
-          <div>
-            <labe >Start Date:</labe> 
-            <input class="ml-6"  type="date" v-model="startDate"  @keyup.enter="fetchAllIssuess" >
+          <div class="mb-6 flex">
+            <div>
+              <label>Start Date:</label> 
+              <input class="ml-6"  type="date" v-model="startDate"  @keyup.enter="fetchAllIssuess" >
+            </div>
+            <div class="ml-20">
+              <label>End Date:</label>
+              <input class="ml-6"  type="date" v-model="endDate"  @keyup.enter="fetchAllIssuess" >
+            </div>
           </div>
-          <div class="ml-20">
-            <labe >End Date:</labe>
-            <input class="ml-6"  type="date" v-model="endDate"  @keyup.enter="fetchAllIssuess" >
+            <div>
+              <button   style="margin-top: -10px; " @click="fetchAllIssuess" class="btn ml-20 rounded-lg w-44 border-0 h-10">Fetch</button>
+            </div>
           </div>
-        </div>
-          <div>
-            <button   style="margin-top: -10px; " @click="fetchAllIssuess" class="btn ml-20 rounded-lg w-44 border-0 h-10">Fetch</button>
+          <div class="grid grid-cols-4 gap-16">
+            <div v-for="(Hour, assignee, index) in Hours">
+              <div class="container mr-5 p-3">
+                <div class="mb-3">{{ assignee }}</div>
+                <div class="bg-white rounded-2xl drop-shadow-lg"
+                  v-bind:class="index % 2 == 0 ? 'left-border1' : 'left-border2'">
+                  <div class="grid grid-cols-2 gap-0 rounded-2xl">
+                    <div class="pt-3 text-center">Closed Task</div>
+                    <div class="num-style-close-task">{{ Hour.closedTasks }}</div>
+                    <div class="pt-3 text-center">Closed Task Hours</div>
+                    <div class="num-style-close-task">{{ Hour.closedHours }}</div>
+                    <div class="pt-3 text-center">Open Task</div>
+                    <div class="num-style-close-task">{{ Hour.openTasks }}</div>
+                    <div class="pt-3 text-center">open Task hours</div>
+                    <div class="num-style-close-task">{{ Hour.openHours }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-   <div class="grid grid-cols-4 gap-16">
-   <div v-for="(Hour, assignee, index) in Hours">
-    <div class="container mr-5 p-3">
-      <div class="mb-3">{{ assignee }}</div>
-      <div class="bg-white rounded-2xl drop-shadow-lg"
-        v-bind:class="index % 2 == 0 ? 'left-border1' : 'left-border2'">
-        <div class="grid grid-cols-2 gap-0 rounded-2xl">
-          <div class="pt-3 text-center">Closed Task</div>
-          <div class="num-style-close-task">{{ Hour.closedTasks }}</div>
-          <div class="pt-3 text-center">Closed Task Hours</div>
-          <div class="num-style-close-task">{{ Hour.closedHours }}</div>
-          <div class="pt-3 text-center">Open Task</div>
-          <div class="num-style-close-task">{{ Hour.openTasks }}</div>
-          <div class="pt-3 text-center">open Task hours</div>
-          <div class="num-style-close-task">{{ Hour.openHours }}</div>
         </div>
       </div>
     </div>
-  </div>
-  </div>
-  </div>
-</div>
-</div>
   </div>
 </template>
 
@@ -165,7 +165,7 @@ import GanttChart from "../components/GanttChart.vue";
 import LateTask from "../components/LateTask.vue";
 import axios from "axios";
 export default {
-  name: "FORTY",
+  name: "FortyHours",
   components: { GanttChart, LateTask, },
   data() {
     return {
@@ -229,7 +229,7 @@ export default {
         
         })
         .catch((error) => {
-          console.log("ee",error)
+          console.error();("ee",error)
           if(error.response.status===403){
           alert("given credential is not valid!!!");
          }
@@ -306,8 +306,8 @@ export default {
               }
             }
           } catch (error) {
-            console.log(error);
-            console.log(issue.html_url);
+            console.error(error);
+            console.error(issue.html_url);
           }
         });
       });
@@ -345,14 +345,13 @@ export default {
           }
             }
           } catch (error) {
-            console.log(error);
-            console.log(issue.html_url);
+            console.error();(error);
+            console.error(issue.html_url);
           }
         });
       });
     },
     formateIssue(issues) {
-      console.log("isi",issues)
       issues.forEach((issue) => {
         if (issue.labels.length < 1) return;
         // check if issue is closed before last Monday
@@ -393,8 +392,8 @@ export default {
                 }
             }
           } catch (error) {
-            console.log(error);
-            console.log(issue.html_url);
+            console.error(error);
+            console.error(issue.html_url);
           }
         });
       });
@@ -421,7 +420,7 @@ export default {
         this.formateIssueWeekly(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   });
   } else if (this.value === "Monthly") {
@@ -443,7 +442,7 @@ export default {
         this.formateIssueMonthly(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   });
 }
@@ -465,7 +464,7 @@ export default {
         this.formateIssue(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
 
     // Fetch open issues
@@ -481,7 +480,7 @@ export default {
         this.formateIssue(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
       });
   });
 },
@@ -513,7 +512,7 @@ export default {
           })
           .catch((error) => {
             nextPage = false;
-            console.log(error);
+            console.error(error);
             return;
           });
         page++;
@@ -545,7 +544,7 @@ export default {
           })
           .catch((error) => {
             nextPage = false;
-            console.log(error);
+            console.error(error);
             return;
           });
         page++;
@@ -559,20 +558,20 @@ export default {
 };
 </script>
 <style scoped>
-* {
-  font-family: "Montserrat";
-}
-.my-header {
-  background-color: #495175;
-}
-button {
-  color: white;
-}
-.btn-select {
-  color: black;
-  background-color: #F7B696;
-  border-radius: 20px;
-}
+  * {
+    font-family: "Montserrat";
+  }
+  .my-header {
+    background-color: #495175;
+  }
+  button {
+    color: white;
+  }
+  .btn-select {
+    color: black;
+    background-color: #F7B696;
+    border-radius: 20px;
+  }
   .bg-color {
     background-color: #EFEDE9;
   }
