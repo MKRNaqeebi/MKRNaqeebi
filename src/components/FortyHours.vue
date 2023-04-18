@@ -896,4 +896,5 @@ button {
   color: #495175;
   background: #F7B696;
   border-radius: 8px;
-}</style>
+}
+</style>
