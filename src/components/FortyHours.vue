@@ -95,8 +95,8 @@
           </div>
           <div class="conatiner bg-white drop-shadow-lg my-5 rounded-2xl h-screen " v-if="buttonClicked">
             <div class="gantt-div ">
-              <GanttChart v-if="username && password && repositories"
-                :username="username"
+              <GanttChart v-if="username && password && repositories" 
+                :username="username" 
                 :password="password"
                 :repositories="repositories" />
             </div>
@@ -197,7 +197,7 @@
                 <PerformanceGanttChart v-if="username && password && repositories && selectedAssignee"
                   :username="username"
                   :password="password"
-                  :repositories="performaceHours[seglectedAssignee].repoName"
+                  :repositories="performaceHours[selectedAssignee].repoName"
                   :selectedAssignee="selectedAssignee" />
               </div>
             </div>
