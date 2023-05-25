@@ -195,10 +195,10 @@
               </div>
               <div class="gantt-div ">
                 <PerformanceGanttChart  v-if="username && password && repositories && selectedAssignee " 
-                 :username="username" 
-                 :password="password" 
-                 :repositories="performaceHours[selectedAssignee].repoName" 
-                 :selectedAssignee="selectedAssignee"
+                  :username="username" 
+                  :password="password" 
+                  :repositories="performaceHours[selectedAssignee].repoName" 
+                  :selectedAssignee="selectedAssignee"
                  />
               </div>
             </div>
@@ -217,7 +217,7 @@ import PerformanceGanttChart from "../components/PerformanceGanttChart.vue";
 import axios from "axios";
 export default {
   name: "FortyHours",
-  components: { GanttChart, LateTask, PerformanceGanttChart },
+  components: { GanttChart, LateTask, PerformanceGanttChart  },
   data() {
     return {
       username: "",
