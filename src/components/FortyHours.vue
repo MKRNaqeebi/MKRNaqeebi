@@ -33,15 +33,15 @@
         <div class="flex " v-if="buttonClickedHide">
           <div>
             <input class=" border-black border rounded-lg w-60 h-10" type="text" placeholder=" Github username"
-              v-model="username" @keyup.enter="fetchIssues"/>
+              v-model="username" @keyup.enter="fetchIssues" />
           </div>
           <div>
             <input class="border-black border ml-20 rounded-lg w-60 h-10" type="password" placeholder=" Github password"
-              v-model="password" @keyup.enter="fetchIssues"/>
+              v-model="password" @keyup.enter="fetchIssues" />
           </div>
           <div>
             <input class="border-black border ml-20 rounded-lg w-60 h-10" type="text"
-              placeholder="  organization e.g CoalAi" v-model="organization" @keyup.enter="fetchIssues"/>
+              placeholder="  organization e.g CoalAi" v-model="organization" @keyup.enter="fetchIssues" />
           </div>
           <div>
             <button @click="login" class="btn ml-10 rounded-lg w-44 border-0 h-10">Fetch</button>
@@ -55,7 +55,7 @@
             <div class="flex-1 w-96">
               <div class="flex">
                 <div class="flex-1 w-0 my-3">
-                  <img class="icon-calendar" src="../assets/SwitchCalendarIcon.svg"/>
+                  <img class="icon-calendar" src="../assets/SwitchCalendarIcon.svg" />
                 </div>
                 <div class="flex-1 w-8 my-3">Switch your calender view</div>
                 <div class="flex-1 w-6 ml-1">
@@ -95,9 +95,7 @@
           </div>
           <div class="conatiner bg-white drop-shadow-lg my-5 rounded-2xl h-screen " v-if="buttonClicked">
             <div class="gantt-div ">
-               <GanttChart v-if="username && password && repositories" 
-                :username="username" 
-                :password="password"
+              <GanttChart v-if="username && password && repositories" :username="username" :password="password"
                 :repositories="repositories" />
             </div>
           </div>
@@ -194,12 +192,9 @@
                 </div>
               </div>
               <div class="gantt-div ">
-                <PerformanceGanttChart  v-if="username && password && repositories && selectedAssignee " 
-                  :username="username" 
-                  :password="password" 
-                  :repositories="performaceHours[selectedAssignee].repoName" 
-                  :selectedAssignee="selectedAssignee"
-                  />
+                <PerformanceGanttChart v-if="username && password && repositories && selectedAssignee"
+                  :username="username" :password="password" :repositories="performaceHours[selectedAssignee].repoName"
+                  :selectedAssignee="selectedAssignee" />
               </div>
             </div>
           </div>
@@ -217,7 +212,7 @@ import PerformanceGanttChart from "../components/PerformanceGanttChart.vue";
 import axios from "axios";
 export default {
   name: "FortyHours",
-  components: { GanttChart, LateTask, PerformanceGanttChart  },
+  components: { GanttChart, LateTask, PerformanceGanttChart },
   data() {
     return {
       username: "",
@@ -422,6 +417,11 @@ export default {
               const prveMonth = new Date(this.startDate)
               var issueClosedAt = new Date(issue.closed_at);
               var issueCreatedAt = new Date(issue.created_at);
+              currentMonth.setHours(0, 0, 0, 0);
+              prveMonth.setHours(0, 0, 0, 0);
+              issueClosedAt.setHours(0, 0, 0, 0);
+              issueCreatedAt.setHours(0, 0, 0, 0);
+
               if (!issue.assignee) {
                 issue.assignee = issue.assignees[0];
               }
@@ -435,10 +435,10 @@ export default {
                   next: 0,
                 };
               }
-              if (issueClosedAt >= prveMonth && issueClosedAt <= currentMonth) {
+              if (issue.state == 'closed' && issueClosedAt >= prveMonth && issueClosedAt <= currentMonth) {
                 this.Hours[issue.assignee.login.toLowerCase()]["closedHours"] += parseInt(label.name);
               }
-              if (issueCreatedAt >= prveMonth && issueCreatedAt <= currentMonth) {
+              if (issue.state == 'open' && issueCreatedAt >= prveMonth && issueCreatedAt <= currentMonth) {
                 this.Hours[issue.assignee.login.toLowerCase()]["openHours"] += parseInt(label.name);
               }
               // increment the number of closed tasks for the assignee
@@ -459,16 +459,21 @@ export default {
     formateAllIssue(issues) {
       issues.forEach((issue) => {
         if (issue.labels.length < 1) return;
-        // check if issue is closed before last Monday
         issue.labels.forEach((label) => {
           try {
             label.name = label.name.replace("hrs", "");
             if (label.name.length < 3 && /^\d+$/.test(label.name)) {
-              var today = new Date();
-              const currentMonth = new Date(this.lastDate)
-              const prveMonth = new Date(this.firstDate)
-              var issueClosedAt = new Date(issue.closed_at);
-              var issueCreatedAt = new Date(issue.created_at);
+              const today = new Date();
+              const currentMonth = new Date(this.lastDate);
+              const prevMonth = new Date(this.firstDate);
+              const issueClosedAt = new Date(issue.closed_at);
+              const issueCreatedAt = new Date(issue.created_at);
+              currentMonth.setHours(0, 0, 0, 0);
+              prevMonth.setHours(0, 0, 0, 0);
+              issueClosedAt.setHours(0, 0, 0, 0);
+              issueCreatedAt.setHours(0, 0, 0, 0);
+
+
               if (!issue.assignee) {
                 issue.assignee = issue.assignees[0];
               }
@@ -483,25 +488,28 @@ export default {
                   next: 0,
                 };
               }
+
               const myArray = issue.repository_url.split("https://api.github.com/repos/");
               if (myArray[1]) {
-                const repo = myArray[1];;
+                const repo = myArray[1];
                 // Check if the repository name is not already in the array before pushing it
                 if (!this.performaceHours[issue.assignee.login.toLowerCase()]["repoName"].includes(repo)) {
                   this.performaceHours[issue.assignee.login.toLowerCase()]["repoName"].push(repo);
                 }
               }
-              if (issueClosedAt >= prveMonth && issueClosedAt <= currentMonth) {
+
+              if (issue.state === "closed" && issueClosedAt >= prevMonth && issueClosedAt <= currentMonth) {
                 this.performaceHours[issue.assignee.login.toLowerCase()]["closedHours"] += parseInt(label.name);
               }
-              if (issueCreatedAt >= prveMonth && issueCreatedAt <= currentMonth) {
+              if (issue.state === "open" && issueCreatedAt >= prevMonth && issueCreatedAt <= currentMonth) {
                 this.performaceHours[issue.assignee.login.toLowerCase()]["openHours"] += parseInt(label.name);
               }
-              // increment the number of closed tasks for the assignee
-              if (issue.state == 'closed' && issueClosedAt >= prveMonth && issueClosedAt <= currentMonth) {
+
+              // Increment the number of closed tasks for the assignee
+              if (issue.state === "closed" && issueClosedAt >= prevMonth && issueClosedAt <= currentMonth) {
                 this.performaceHours[issue.assignee.login.toLowerCase()].closedTasks++;
               }
-              if (issue.state == 'open' && issueCreatedAt >= prveMonth && issueCreatedAt <= currentMonth) {
+              if (issue.state === "open" && issueCreatedAt >= prevMonth && issueCreatedAt <= currentMonth) {
                 this.performaceHours[issue.assignee.login.toLowerCase()].openTasks++;
               }
             }
@@ -562,43 +570,52 @@ export default {
       }
     },
     selectIssue(repositories) {
-      var firstDate = this.startDate;
-      var lastDate = this.endDate;
+      var first = this.firstDate;
+      var last = this.lastDate;
+
       repositories.forEach((repo) => {
-        // Fetch closed issues
-        axios({
-          method: "get",
-          url: `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived=false&closed=${firstDate}..${lastDate}`,
-          auth: {
-            username: this.username,
-            password: this.password,
-          },
-        })
-          .then((response) => {
-            this.formateIssue(response.data);
+        // Function to recursively fetch pages of issues
+        const fetchIssues = (url, state) => {
+          axios({
+            method: "get",
+            url: url,
+            auth: {
+              username: this.username,
+              password: this.password,
+            },
           })
-          .catch((error) => {
-            console.error(error);
-          });
+            .then((response) => {
+              this.formateIssue(response.data);
+
+              // Check if there are more pages to fetch
+              const linkHeader = response.headers.link;
+              if (linkHeader && linkHeader.includes('rel="next"')) {
+                // Extract the URL for the next page
+                const nextUrl = linkHeader
+                  .split(", ")
+                  .find((link) => link.includes('rel="next"'))
+                  .split(";")[0]
+                  .trim()
+                  .slice(1, -1);
+
+                // Fetch the next page of issues
+                fetchIssues(nextUrl, state);
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        };
+
+        // Fetch closed issues
+        const closedIssuesUrl = `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived=false&closed=${first}..${last}`;
+        fetchIssues(closedIssuesUrl, "closed");
 
         // Fetch open issues
-        axios({
-          method: "get",
-          url: `https://api.github.com/repos/${repo.full_name}/issues?state=open&archived=false&created=${firstDate}..${lastDate}`,
-          auth: {
-            username: this.username,
-            password: this.password,
-          },
-        })
-          .then((response) => {
-            this.formateIssue(response.data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        const openIssuesUrl = `https://api.github.com/repos/${repo.full_name}/issues?state=open&archived=false&created=${first}..${last}`;
+        fetchIssues(openIssuesUrl, "open");
       });
     },
-
     allRepo(repos) {
       repos.forEach((repo) => {
         this.repositories.push(repo.full_name);
@@ -671,38 +688,48 @@ export default {
     selectAllIssue(repositories) {
       var first = this.firstDate;
       var last = this.lastDate;
+
       repositories.forEach((repo) => {
-        // Fetch closed issues
-        axios({
-          method: "get",
-          url: `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived=false&closed=${first}..${last}`,
-          auth: {
-            username: this.username,
-            password: this.password,
-          },
-        })
-          .then((response) => {
-            this.formateAllIssue(response.data);
+        // Function to recursively fetch pages of issues
+        const fetchIssues = (url, state) => {
+          axios({
+            method: "get",
+            url: url,
+            auth: {
+              username: this.username,
+              password: this.password,
+            },
           })
-          .catch((error) => {
-            console.error(error);
-          });
+            .then((response) => {
+              this.formateAllIssue(response.data);
+
+              // Check if there are more pages to fetch
+              const linkHeader = response.headers.link;
+              if (linkHeader && linkHeader.includes('rel="next"')) {
+                // Extract the URL for the next page
+                const nextUrl = linkHeader
+                  .split(", ")
+                  .find((link) => link.includes('rel="next"'))
+                  .split(";")[0]
+                  .trim()
+                  .slice(1, -1);
+
+                // Fetch the next page of issues
+                fetchIssues(nextUrl, state);
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        };
+
+        // Fetch closed issues
+        const closedIssuesUrl = `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived=false&closed=${first}..${last}`;
+        fetchIssues(closedIssuesUrl, "closed");
 
         // Fetch open issues
-        axios({
-          method: "get",
-          url: `https://api.github.com/repos/${repo.full_name}/issues?state=open&archived=false&created=${first}..${last}`,
-          auth: {
-            username: this.username,
-            password: this.password,
-          },
-        })
-          .then((response) => {
-            this.formateAllIssue(response.data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        const openIssuesUrl = `https://api.github.com/repos/${repo.full_name}/issues?state=open&archived=false&created=${first}..${last}`;
+        fetchIssues(openIssuesUrl, "open");
       });
     },
     fetch() {
