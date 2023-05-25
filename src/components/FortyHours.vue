@@ -33,15 +33,15 @@
         <div class="flex " v-if="buttonClickedHide">
           <div>
             <input class=" border-black border rounded-lg w-60 h-10" type="text" placeholder=" Github username"
-              v-model="username" @keyup.enter="fetchIssues" />
+              v-model="username" @keyup.enter="fetchIssues"/>
           </div>
           <div>
             <input class="border-black border ml-20 rounded-lg w-60 h-10" type="password" placeholder=" Github password"
-              v-model="password" @keyup.enter="fetchIssues" />
+              v-model="password" @keyup.enter="fetchIssues"/>
           </div>
           <div>
             <input class="border-black border ml-20 rounded-lg w-60 h-10" type="text"
-              placeholder="  organization e.g CoalAi" v-model="organization" @keyup.enter="fetchIssues" />
+              placeholder="  organization e.g CoalAi" v-model="organization" @keyup.enter="fetchIssues"/>
           </div>
           <div>
             <button @click="login" class="btn ml-10 rounded-lg w-44 border-0 h-10">Fetch</button>
@@ -55,7 +55,7 @@
             <div class="flex-1 w-96">
               <div class="flex">
                 <div class="flex-1 w-0 my-3">
-                  <img class="icon-calendar" src="../assets/SwitchCalendarIcon.svg" />
+                  <img class="icon-calendar" src="../assets/SwitchCalendarIcon.svg"/>
                 </div>
                 <div class="flex-1 w-8 my-3">Switch your calender view</div>
                 <div class="flex-1 w-6 ml-1">
@@ -95,7 +95,9 @@
           </div>
           <div class="conatiner bg-white drop-shadow-lg my-5 rounded-2xl h-screen " v-if="buttonClicked">
             <div class="gantt-div ">
-              <GanttChart v-if="username && password && repositories" :username="username" :password="password"
+              <GanttChart v-if="username && password && repositories"
+                :username="username"
+                :password="password"
                 :repositories="repositories" />
             </div>
           </div>
@@ -193,7 +195,9 @@
               </div>
               <div class="gantt-div ">
                 <PerformanceGanttChart v-if="username && password && repositories && selectedAssignee"
-                  :username="username" :password="password" :repositories="performaceHours[selectedAssignee].repoName"
+                  :username="username"
+                  :password="password"
+                  :repositories="performaceHours[seglectedAssignee].repoName"
                   :selectedAssignee="selectedAssignee" />
               </div>
             </div>
