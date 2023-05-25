@@ -195,11 +195,11 @@
               </div>
               <div class="gantt-div ">
                 <PerformanceGanttChart  v-if="username && password && repositories && selectedAssignee " 
-                :username="username" 
-                :password="password" 
-                :repositories="performaceHours[selectedAssignee].repoName" 
-                :selectedAssignee="selectedAssignee"
-                />
+                 :username="username" 
+                 :password="password" 
+                 :repositories="performaceHours[selectedAssignee].repoName" 
+                 :selectedAssignee="selectedAssignee"
+                 />
               </div>
             </div>
           </div>
