@@ -477,8 +477,6 @@ export default {
               prevMonth.setHours(0, 0, 0, 0);
               issueClosedAt.setHours(0, 0, 0, 0);
               issueCreatedAt.setHours(0, 0, 0, 0);
-
-
               if (!issue.assignee) {
                 issue.assignee = issue.assignees[0];
               }
@@ -502,7 +500,6 @@ export default {
                   this.performaceHours[issue.assignee.login.toLowerCase()]["repoName"].push(repo);
                 }
               }
-
               if (issue.state === "closed" && issueClosedAt >= prevMonth && issueClosedAt <= currentMonth) {
                 this.performaceHours[issue.assignee.login.toLowerCase()]["closedHours"] += parseInt(label.name);
               }
@@ -577,7 +574,6 @@ export default {
     selectIssue(repositories) {
       var first = this.firstDate;
       var last = this.lastDate;
-
       repositories.forEach((repo) => {
         // Function to recursively fetch pages of issues
         const fetchIssues = (url, state) => {
@@ -591,7 +587,6 @@ export default {
           })
             .then((response) => {
               this.formateIssue(response.data);
-
               // Check if there are more pages to fetch
               const linkHeader = response.headers.link;
               if (linkHeader && linkHeader.includes('rel="next"')) {
@@ -611,11 +606,9 @@ export default {
               console.error(error);
             });
         };
-
         // Fetch closed issues
         const closedIssuesUrl = `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived=false&closed=${first}..${last}`;
         fetchIssues(closedIssuesUrl, "closed");
-
         // Fetch open issues
         const openIssuesUrl = `https://api.github.com/repos/${repo.full_name}/issues?state=open&archived=false&created=${first}..${last}`;
         fetchIssues(openIssuesUrl, "open");
@@ -693,7 +686,6 @@ export default {
     selectAllIssue(repositories) {
       var first = this.firstDate;
       var last = this.lastDate;
-
       repositories.forEach((repo) => {
         // Function to recursively fetch pages of issues
         const fetchIssues = (url, state) => {
@@ -707,7 +699,6 @@ export default {
           })
             .then((response) => {
               this.formateAllIssue(response.data);
-
               // Check if there are more pages to fetch
               const linkHeader = response.headers.link;
               if (linkHeader && linkHeader.includes('rel="next"')) {
@@ -718,7 +709,6 @@ export default {
                   .split(";")[0]
                   .trim()
                   .slice(1, -1);
-
                 // Fetch the next page of issues
                 fetchIssues(nextUrl, state);
               }
@@ -727,11 +717,9 @@ export default {
               console.error(error);
             });
         };
-
         // Fetch closed issues
         const closedIssuesUrl = `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived=false&closed=${first}..${last}`;
         fetchIssues(closedIssuesUrl, "closed");
-
         // Fetch open issues
         const openIssuesUrl = `https://api.github.com/repos/${repo.full_name}/issues?state=open&archived=false&created=${first}..${last}`;
         fetchIssues(openIssuesUrl, "open");
