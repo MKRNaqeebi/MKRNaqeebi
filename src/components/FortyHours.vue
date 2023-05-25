@@ -199,7 +199,7 @@
                   :password="password" 
                   :repositories="performaceHours[selectedAssignee].repoName" 
                   :selectedAssignee="selectedAssignee"
-                 />
+                  />
               </div>
             </div>
           </div>
