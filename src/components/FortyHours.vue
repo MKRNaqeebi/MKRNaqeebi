@@ -422,6 +422,11 @@ export default {
               const prveMonth = new Date(this.startDate)
               var issueClosedAt = new Date(issue.closed_at);
               var issueCreatedAt = new Date(issue.created_at);
+              currentMonth.setHours(0, 0, 0, 0);
+              prveMonth.setHours(0, 0, 0, 0);
+              issueClosedAt.setHours(0, 0, 0, 0);
+              issueCreatedAt.setHours(0, 0, 0, 0);
+
               if (!issue.assignee) {
                 issue.assignee = issue.assignees[0];
               }
@@ -435,10 +440,10 @@ export default {
                   next: 0,
                 };
               }
-              if (issueClosedAt >= prveMonth && issueClosedAt <= currentMonth) {
+              if (issue.state == 'closed' && issueClosedAt >= prveMonth && issueClosedAt <= currentMonth) {
                 this.Hours[issue.assignee.login.toLowerCase()]["closedHours"] += parseInt(label.name);
               }
-              if (issueCreatedAt >= prveMonth && issueCreatedAt <= currentMonth) {
+              if (issue.state == 'open' && issueCreatedAt >= prveMonth && issueCreatedAt <= currentMonth) {
                 this.Hours[issue.assignee.login.toLowerCase()]["openHours"] += parseInt(label.name);
               }
               // increment the number of closed tasks for the assignee
@@ -459,16 +464,19 @@ export default {
     formateAllIssue(issues) {
       issues.forEach((issue) => {
         if (issue.labels.length < 1) return;
-        // check if issue is closed before last Monday
         issue.labels.forEach((label) => {
           try {
             label.name = label.name.replace("hrs", "");
             if (label.name.length < 3 && /^\d+$/.test(label.name)) {
-              var today = new Date();
-              const currentMonth = new Date(this.lastDate)
-              const prveMonth = new Date(this.firstDate)
-              var issueClosedAt = new Date(issue.closed_at);
-              var issueCreatedAt = new Date(issue.created_at);
+              const today = new Date();
+              const currentMonth = new Date(this.lastDate);
+              const prevMonth = new Date(this.firstDate);
+              const issueClosedAt = new Date(issue.closed_at);
+              const issueCreatedAt = new Date(issue.created_at);
+              currentMonth.setHours(0, 0, 0, 0);
+              prevMonth.setHours(0, 0, 0, 0);
+              issueClosedAt.setHours(0, 0, 0, 0);
+              issueCreatedAt.setHours(0, 0, 0, 0);
               if (!issue.assignee) {
                 issue.assignee = issue.assignees[0];
               }
@@ -483,25 +491,27 @@ export default {
                   next: 0,
                 };
               }
+
               const myArray = issue.repository_url.split("https://api.github.com/repos/");
               if (myArray[1]) {
-                const repo = myArray[1];;
+                const repo = myArray[1];
                 // Check if the repository name is not already in the array before pushing it
                 if (!this.performaceHours[issue.assignee.login.toLowerCase()]["repoName"].includes(repo)) {
                   this.performaceHours[issue.assignee.login.toLowerCase()]["repoName"].push(repo);
                 }
               }
-              if (issueClosedAt >= prveMonth && issueClosedAt <= currentMonth) {
+              if (issue.state === "closed" && issueClosedAt >= prevMonth && issueClosedAt <= currentMonth) {
                 this.performaceHours[issue.assignee.login.toLowerCase()]["closedHours"] += parseInt(label.name);
               }
-              if (issueCreatedAt >= prveMonth && issueCreatedAt <= currentMonth) {
+              if (issue.state === "open" && issueCreatedAt >= prevMonth && issueCreatedAt <= currentMonth) {
                 this.performaceHours[issue.assignee.login.toLowerCase()]["openHours"] += parseInt(label.name);
               }
-              // increment the number of closed tasks for the assignee
-              if (issue.state == 'closed' && issueClosedAt >= prveMonth && issueClosedAt <= currentMonth) {
+
+              // Increment the number of closed tasks for the assignee
+              if (issue.state === "closed" && issueClosedAt >= prevMonth && issueClosedAt <= currentMonth) {
                 this.performaceHours[issue.assignee.login.toLowerCase()].closedTasks++;
               }
-              if (issue.state == 'open' && issueCreatedAt >= prveMonth && issueCreatedAt <= currentMonth) {
+              if (issue.state === "open" && issueCreatedAt >= prevMonth && issueCreatedAt <= currentMonth) {
                 this.performaceHours[issue.assignee.login.toLowerCase()].openTasks++;
               }
             }
@@ -562,43 +572,48 @@ export default {
       }
     },
     selectIssue(repositories) {
-      var firstDate = this.startDate;
-      var lastDate = this.endDate;
+      var first = this.firstDate;
+      var last = this.lastDate;
       repositories.forEach((repo) => {
-        // Fetch closed issues
-        axios({
-          method: "get",
-          url: `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived=false&closed=${firstDate}..${lastDate}`,
-          auth: {
-            username: this.username,
-            password: this.password,
-          },
-        })
-          .then((response) => {
-            this.formateIssue(response.data);
+        // Function to recursively fetch pages of issues
+        const fetchIssues = (url, state) => {
+          axios({
+            method: "get",
+            url: url,
+            auth: {
+              username: this.username,
+              password: this.password,
+            },
           })
-          .catch((error) => {
-            console.error(error);
-          });
+            .then((response) => {
+              this.formateIssue(response.data);
+              // Check if there are more pages to fetch
+              const linkHeader = response.headers.link;
+              if (linkHeader && linkHeader.includes('rel="next"')) {
+                // Extract the URL for the next page
+                const nextUrl = linkHeader
+                  .split(", ")
+                  .find((link) => link.includes('rel="next"'))
+                  .split(";")[0]
+                  .trim()
+                  .slice(1, -1);
 
+                // Fetch the next page of issues
+                fetchIssues(nextUrl, state);
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        };
+        // Fetch closed issues
+        const closedIssuesUrl = `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived=false&closed=${first}..${last}`;
+        fetchIssues(closedIssuesUrl, "closed");
         // Fetch open issues
-        axios({
-          method: "get",
-          url: `https://api.github.com/repos/${repo.full_name}/issues?state=open&archived=false&created=${firstDate}..${lastDate}`,
-          auth: {
-            username: this.username,
-            password: this.password,
-          },
-        })
-          .then((response) => {
-            this.formateIssue(response.data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        const openIssuesUrl = `https://api.github.com/repos/${repo.full_name}/issues?state=open&archived=false&created=${first}..${last}`;
+        fetchIssues(openIssuesUrl, "open");
       });
     },
-
     allRepo(repos) {
       repos.forEach((repo) => {
         this.repositories.push(repo.full_name);
@@ -672,37 +687,42 @@ export default {
       var first = this.firstDate;
       var last = this.lastDate;
       repositories.forEach((repo) => {
+        // Function to recursively fetch pages of issues
+        const fetchIssues = (url, state) => {
+          axios({
+            method: "get",
+            url: url,
+            auth: {
+              username: this.username,
+              password: this.password,
+            },
+          })
+            .then((response) => {
+              this.formateAllIssue(response.data);
+              // Check if there are more pages to fetch
+              const linkHeader = response.headers.link;
+              if (linkHeader && linkHeader.includes('rel="next"')) {
+                // Extract the URL for the next page
+                const nextUrl = linkHeader
+                  .split(", ")
+                  .find((link) => link.includes('rel="next"'))
+                  .split(";")[0]
+                  .trim()
+                  .slice(1, -1);
+                // Fetch the next page of issues
+                fetchIssues(nextUrl, state);
+              }
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        };
         // Fetch closed issues
-        axios({
-          method: "get",
-          url: `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived=false&closed=${first}..${last}`,
-          auth: {
-            username: this.username,
-            password: this.password,
-          },
-        })
-          .then((response) => {
-            this.formateAllIssue(response.data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-
+        const closedIssuesUrl = `https://api.github.com/repos/${repo.full_name}/issues?state=closed&archived=false&closed=${first}..${last}`;
+        fetchIssues(closedIssuesUrl, "closed");
         // Fetch open issues
-        axios({
-          method: "get",
-          url: `https://api.github.com/repos/${repo.full_name}/issues?state=open&archived=false&created=${first}..${last}`,
-          auth: {
-            username: this.username,
-            password: this.password,
-          },
-        })
-          .then((response) => {
-            this.formateAllIssue(response.data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        const openIssuesUrl = `https://api.github.com/repos/${repo.full_name}/issues?state=open&archived=false&created=${first}..${last}`;
+        fetchIssues(openIssuesUrl, "open");
       });
     },
     fetch() {
