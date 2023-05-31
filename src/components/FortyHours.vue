@@ -95,7 +95,7 @@
           </div>
           <div class="conatiner bg-white drop-shadow-lg my-5 rounded-2xl h-screen " v-if="buttonClicked">
             <div class="gantt-div ">
-              <GanttChart v-if="username && password && repositories"  
+               <GanttChart v-if="username && password && repositories" 
                 :username="username" 
                 :password="password"
                 :repositories="repositories" />
