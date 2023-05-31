@@ -33,15 +33,15 @@
         <div class="flex " v-if="buttonClickedHide">
           <div>
             <input class=" border-black border rounded-lg w-60 h-10" type="text" placeholder=" Github username"
-              v-model="username" @keyup.enter="fetchIssues"/>
+              v-model="username" @keyup.enter="fetchIssues" />
           </div>
           <div>
             <input class="border-black border ml-20 rounded-lg w-60 h-10" type="password" placeholder=" Github password"
-              v-model="password" @keyup.enter="fetchIssues"/>
+              v-model="password" @keyup.enter="fetchIssues" />
           </div>
           <div>
             <input class="border-black border ml-20 rounded-lg w-60 h-10" type="text"
-              placeholder="  organization e.g CoalAi" v-model="organization" @keyup.enter="fetchIssues"/>
+              placeholder="  organization e.g CoalAi" v-model="organization" @keyup.enter="fetchIssues" />
           </div>
           <div>
             <button @click="login" class="btn ml-10 rounded-lg w-44 border-0 h-10">Fetch</button>
@@ -55,7 +55,7 @@
             <div class="flex-1 w-96">
               <div class="flex">
                 <div class="flex-1 w-0 my-3">
-                  <img class="icon-calendar" src="../assets/SwitchCalendarIcon.svg"/>
+                  <img class="icon-calendar" src="../assets/SwitchCalendarIcon.svg" />
                 </div>
                 <div class="flex-1 w-8 my-3">Switch your calender view</div>
                 <div class="flex-1 w-6 ml-1">
@@ -95,9 +95,7 @@
           </div>
           <div class="conatiner bg-white drop-shadow-lg my-5 rounded-2xl h-screen " v-if="buttonClicked">
             <div class="gantt-div ">
-               <GanttChart v-if="username && password && repositories" 
-                :username="username" 
-                :password="password"
+              <GanttChart v-if="username && password && repositories" :username="username" :password="password"
                 :repositories="repositories" />
             </div>
           </div>
@@ -194,12 +192,9 @@
                 </div>
               </div>
               <div class="gantt-div ">
-                <PerformanceGanttChart  v-if="username && password && repositories && selectedAssignee " 
-                  :username="username" 
-                  :password="password" 
-                  :repositories="performaceHours[selectedAssignee].repoName" 
-                  :selectedAssignee="selectedAssignee"
-                  />
+                <PerformanceGanttChart v-if="username && password && repositories && selectedAssignee"
+                  :username="username" :password="password" :repositories="performaceHours[selectedAssignee].repoName"
+                  :selectedAssignee="selectedAssignee" />
               </div>
             </div>
           </div>
@@ -217,7 +212,7 @@ import PerformanceGanttChart from "../components/PerformanceGanttChart.vue";
 import axios from "axios";
 export default {
   name: "FortyHours",
-  components: { GanttChart, LateTask, PerformanceGanttChart  },
+  components: { GanttChart, LateTask, PerformanceGanttChart },
   data() {
     return {
       username: "",
@@ -409,9 +404,8 @@ export default {
         });
       });
     },
-     formateIssue(issues) {
+    formateIssue(issues) {
       issues.forEach((issue) => {
-        console.log("issue", issue.length);
         var today = new Date();
         const currentMonth = new Date(this.endDate)
         const prveMonth = new Date(this.startDate)
@@ -461,64 +455,67 @@ export default {
     },
     formateAllIssue(issues) {
       issues.forEach((issue) => {
-        if (issue.labels.length < 1) return;
-        issue.labels.forEach((label) => {
-          try {
-            label.name = label.name.replace("hrs", "");
-            if (label.name.length < 3 && /^\d+$/.test(label.name)) {
-              const today = new Date();
-              const currentMonth = new Date(this.lastDate);
-              const prevMonth = new Date(this.firstDate);
-              const issueClosedAt = new Date(issue.closed_at);
-              const issueCreatedAt = new Date(issue.created_at);
-              currentMonth.setHours(0, 0, 0, 0);
-              prevMonth.setHours(0, 0, 0, 0);
-              issueClosedAt.setHours(0, 0, 0, 0);
-              issueCreatedAt.setHours(0, 0, 0, 0);
-              if (!issue.assignee) {
-                issue.assignee = issue.assignees[0];
+        let labelHours = 0;
+        const today = new Date();
+        const currentMonth = new Date(this.lastDate);
+        const prevMonth = new Date(this.firstDate);
+        const issueClosedAt = new Date(issue.closed_at);
+        const issueCreatedAt = new Date(issue.created_at);
+        currentMonth.setHours(0, 0, 0, 0);
+        prevMonth.setHours(0, 0, 0, 0);
+        issueClosedAt.setHours(0, 0, 0, 0);
+        issueCreatedAt.setHours(0, 0, 0, 0);
+        if (issue.labels.length > 0) {
+          issue.labels.forEach((label) => {
+            try {
+              label.name = label.name.replace("hrs", "");
+              if (label.name.length < 3 && /^\d+$/.test(label.name)) {
+                labelHours += parseInt(label.name);
               }
-              if (!issue.assignee) return;
-              if (!this.performaceHours[issue.assignee.login.toLowerCase()]) {
-                this.performaceHours[issue.assignee.login.toLowerCase()] = {
-                  closedHours: 0,
-                  openHours: 0,
-                  closedTasks: 0,
-                  openTasks: 0,
-                  repoName: [],
-                  next: 0,
-                };
-              }
-
-              const myArray = issue.repository_url.split("https://api.github.com/repos/");
-              if (myArray[1]) {
-                const repo = myArray[1];
-                // Check if the repository name is not already in the array before pushing it
-                if (!this.performaceHours[issue.assignee.login.toLowerCase()]["repoName"].includes(repo)) {
-                  this.performaceHours[issue.assignee.login.toLowerCase()]["repoName"].push(repo);
-                }
-              }
-              if (issue.state === "closed" && issueClosedAt >= prevMonth && issueClosedAt <= currentMonth) {
-                this.performaceHours[issue.assignee.login.toLowerCase()]["closedHours"] += parseInt(label.name);
-              }
-              if (issue.state === "open" && issueCreatedAt >= prevMonth && issueCreatedAt <= currentMonth) {
-                this.performaceHours[issue.assignee.login.toLowerCase()]["openHours"] += parseInt(label.name);
-              }
-
-              // Increment the number of closed tasks for the assignee
-              if (issue.state === "closed" && issueClosedAt >= prevMonth && issueClosedAt <= currentMonth) {
-                this.performaceHours[issue.assignee.login.toLowerCase()].closedTasks++;
-              }
-              if (issue.state === "open" && issueCreatedAt >= prevMonth && issueCreatedAt <= currentMonth) {
-                this.performaceHours[issue.assignee.login.toLowerCase()].openTasks++;
-              }
+            } catch (error) {
+              console.error(error);
+              console.error(issue.html_url);
             }
-          } catch (error) {
-            console.error(error);
-            console.error(issue.html_url);
+          });
+        }
+        if (!issue.assignee) {
+          issue.assignee = issue.assignees[0];
+        }
+        if (!issue.assignee) return;
+        if (!this.performaceHours[issue.assignee.login.toLowerCase()]) {
+          this.performaceHours[issue.assignee.login.toLowerCase()] = {
+            closedHours: 0,
+            openHours: 0,
+            closedTasks: 0,
+            openTasks: 0,
+            repoName: [],
+            next: 0,
+          };
+        }
+
+        const myArray = issue.repository_url.split("https://api.github.com/repos/");
+        if (myArray[1]) {
+          const repo = myArray[1];
+          // Check if the repository name is not already in the array before pushing it
+          if (!this.performaceHours[issue.assignee.login.toLowerCase()]["repoName"].includes(repo)) {
+            this.performaceHours[issue.assignee.login.toLowerCase()]["repoName"].push(repo);
           }
-        });
-      });
+        }
+        if (issue.state === "closed" && issueClosedAt >= prevMonth && issueClosedAt <= currentMonth) {
+          this.performaceHours[issue.assignee.login.toLowerCase()]["closedHours"] += parseInt(labelHours);
+        }
+        if (issue.state === "open" && issueCreatedAt >= prevMonth && issueCreatedAt <= currentMonth) {
+          this.performaceHours[issue.assignee.login.toLowerCase()]["openHours"] += parseInt(labelHours);
+        }
+
+        // Increment the number of closed tasks for the assignee
+        if (issue.state === "closed" && issueClosedAt >= prevMonth && issueClosedAt <= currentMonth) {
+          this.performaceHours[issue.assignee.login.toLowerCase()].closedTasks++;
+        }
+        if (issue.state === "open" && issueCreatedAt >= prevMonth && issueCreatedAt <= currentMonth) {
+          this.performaceHours[issue.assignee.login.toLowerCase()].openTasks++;
+        }
+      })
     },
     allIssues(repositories) {
       if (!repositories) {
