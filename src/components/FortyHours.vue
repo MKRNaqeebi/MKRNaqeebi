@@ -409,56 +409,54 @@ export default {
         });
       });
     },
-    formateIssue(issues) {
+     formateIssue(issues) {
       issues.forEach((issue) => {
-        if (issue.labels.length < 1) return;
-        // check if issue is closed before last Monday
-        issue.labels.forEach((label) => {
-          try {
-            label.name = label.name.replace("hrs", "");
-            if (label.name.length < 3 && /^\d+$/.test(label.name)) {
-              var today = new Date();
-              const currentMonth = new Date(this.endDate)
-              const prveMonth = new Date(this.startDate)
-              var issueClosedAt = new Date(issue.closed_at);
-              var issueCreatedAt = new Date(issue.created_at);
-              currentMonth.setHours(0, 0, 0, 0);
-              prveMonth.setHours(0, 0, 0, 0);
-              issueClosedAt.setHours(0, 0, 0, 0);
-              issueCreatedAt.setHours(0, 0, 0, 0);
-
-              if (!issue.assignee) {
-                issue.assignee = issue.assignees[0];
+        console.log("issue", issue.length);
+        var today = new Date();
+        const currentMonth = new Date(this.endDate)
+        const prveMonth = new Date(this.startDate)
+        var issueClosedAt = new Date(issue.closed_at);
+        var issueCreatedAt = new Date(issue.created_at);
+        currentMonth.setHours(0, 0, 0, 0);
+        prveMonth.setHours(0, 0, 0, 0);
+        issueClosedAt.setHours(0, 0, 0, 0);
+        issueCreatedAt.setHours(0, 0, 0, 0);
+        // Calculate the label hours
+        let labelHours = 0;
+        if (issue.labels.length > 0) {
+          issue.labels.forEach((label) => {
+            try {
+              label.name = label.name.replace("hrs", "");
+              if (label.name.length < 3 && /^\d+$/.test(label.name)) {
+                labelHours += parseInt(label.name);
               }
-              if (!issue.assignee) return;
-              if (!this.Hours[issue.assignee.login.toLowerCase()]) {
-                this.Hours[issue.assignee.login.toLowerCase()] = {
-                  closedHours: 0,
-                  openHours: 0,
-                  closedTasks: 0,
-                  openTasks: 0,
-                  next: 0,
-                };
-              }
-              if (issue.state == 'closed' && issueClosedAt >= prveMonth && issueClosedAt <= currentMonth) {
-                this.Hours[issue.assignee.login.toLowerCase()]["closedHours"] += parseInt(label.name);
-              }
-              if (issue.state == 'open' && issueCreatedAt >= prveMonth && issueCreatedAt <= currentMonth) {
-                this.Hours[issue.assignee.login.toLowerCase()]["openHours"] += parseInt(label.name);
-              }
-              // increment the number of closed tasks for the assignee
-              if (issue.state == 'closed' && issueClosedAt >= prveMonth && issueClosedAt <= currentMonth) {
-                this.Hours[issue.assignee.login.toLowerCase()].closedTasks++;
-              }
-              if (issue.state == 'open' && issueCreatedAt >= prveMonth && issueCreatedAt <= currentMonth) {
-                this.Hours[issue.assignee.login.toLowerCase()].openTasks++;
-              }
+            } catch (error) {
+              console.error(error);
+              console.error(issue.html_url);
             }
-          } catch (error) {
-            console.error(error);
-            console.error(issue.html_url);
-          }
-        });
+          });
+        }
+        if (!issue.assignee) {
+          issue.assignee = issue.assignees[0];
+        }
+        if (!issue.assignee) return;
+        if (!this.Hours[issue.assignee.login.toLowerCase()]) {
+          this.Hours[issue.assignee.login.toLowerCase()] = {
+            closedHours: 0,
+            openHours: 0,
+            closedTasks: 0,
+            openTasks: 0,
+            next: 0,
+          };
+        }
+        if (issue.state == 'closed' && issueClosedAt >= prveMonth && issueClosedAt <= currentMonth) {
+          this.Hours[issue.assignee.login.toLowerCase()]["closedHours"] += labelHours;
+          this.Hours[issue.assignee.login.toLowerCase()].closedTasks++;
+        }
+        if (issue.state == 'open' && issueCreatedAt >= prveMonth && issueCreatedAt <= currentMonth) {
+          this.Hours[issue.assignee.login.toLowerCase()]["openHours"] += labelHours;
+          this.Hours[issue.assignee.login.toLowerCase()].openTasks++;
+        }
       });
     },
     formateAllIssue(issues) {
