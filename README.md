@@ -38,6 +38,60 @@ I am a fullstack engineer with DevOps experience. I love to automate things.
 
 - **PocketISA**: AI chatbot which act like real-estate agent and help user to find best property. Gather data from user and connect them with real-estate agent once given threshold on data is met.
 
+
+My previous few projects:
+
+At X, I have designed and developed AI applications mostly.
+1. I have worked on an application to analyze messages between the call agent and customer so, the company can get useful insight from chat to improve user experience.
+2. I design GPT prompts for applications where GPT API identifies where the product is mentioned in a given chat between support and the customer.
+3. I build a product recommendation system based on Big Query.
+
+At aiXplain, I have designed ML tools for data scientists. I worked on almost all parts but most for DevOps.
+1. I have worked on JavaScript-based restful APIs to serve variable models from Kubernetes.
+2. Worked on the pipeline to deploy models on Kubernetes with kserve. AI/ML engineers write code to serve the model and the code gets containerized and deployed on Kubernetes with GitHub actions.
+3. Worked to discover deployed models and used them in work from web UI.
+4. Working train model on a given dataset and return trained model.
+5. Worked to create a workflow to use different models with the same data to check which perform model performed better.
+6. Worked to build a search system to search based on text and filter based on text, int, and float.
+etc.
+I have worked on Python, flask, Kubernetes, EKS, AWS, kubeflow, kubeflow pipelines, AI, ML, etc
+
+At DataFlik I develop An advanced AI engine, thousands of data points, instant algorithmic skip tracing, cutting-edge geofencing ad campaigns, and the best hidden off-market deals and leads. I have worked on the backend and frontend of the application. I have worked on the backend with Django, Django Rest Framework, and PostgreSQL. I have worked on the frontend with React. I have worked on the deployment with Docker, Docker Compose, and AWS.
+
+I have also designed a ChatBot for a Taxi Service, that answered fixed queries and offered Lost and Found services. A customer would declare something as lost and describe the specifications of that lost product, then, he or she would be able to track the status of how it is being found. The technology stacks used were Google Cloud, Express, Microservices, Node js, Vue js, GitHub actions, Bot js, and third-party APIs.
+
+Estateza is another real estate project, in which I was responsible for enhancing and maintaining the whole system. I had to scrap the real estate data and do development work on that data according to the client's requirements.
+
+Furthermore, I have worked with SingTel, the biggest telecommunication company in Singapore, to design and develop a triggers engine for them and I even traveled to Singapore to deploy it. So, you know that I'm 100% invested in my work for my clients. The technology stacks were GCP, angular, Django, MySQL, Jenkins, Bitbucket pipeline, on-prem cloud docker, etc
+
+As for this proposal, I'm interested in the job you have posted. Let's hop on a call to discuss this offer in detail.
+
+Doc AI
+
+text to SQL
+
+Learn English GPT
+
+SearchLLM
+
+quizeLLM
+
+TwitterLLM
+
+Legal Chatbot
+
+TuneBot
+
+Social Media
+
+Taxi chatbot
+
+Thanks
+
+Muhammad Kamran
+
+
+
 <!--
 **MKRNaqeebi/MKRNaqeebi** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
