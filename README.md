@@ -54,7 +54,7 @@ At aiXplain, I have designed ML tools for data scientists. I worked on almost al
 5. Worked to create a workflow to use different models with the same data to check which perform model performed better.
 6. Worked to build a search system to search based on text and filter based on text, int, and float.
 etc.
-I have worked on Python, flask, Kubernetes, EKS, AWS, kubeflow, kubeflow pipelines, AI, ML, etc
+I have worked on Python, flask, Kubernetes, EKS, AWS, kubeflow, kubeflow pipelines, AI, ML, etc.
 
 At DataFlik I develop An advanced AI engine, thousands of data points, instant algorithmic skip tracing, cutting-edge geofencing ad campaigns, and the best hidden off-market deals and leads. I have worked on the backend and frontend of the application. I have worked on the backend with Django, Django Rest Framework, and PostgreSQL. I have worked on the frontend with React. I have worked on the deployment with Docker, Docker Compose, and AWS.
 
@@ -66,25 +66,25 @@ Furthermore, I have worked with SingTel, the biggest telecommunication company i
 
 As for this proposal, I'm interested in the job you have posted. Let's hop on a call to discuss this offer in detail.
 
-Doc AI
+Doc AI: Chat with your docs, your way. Embed chat widget to any website you want. You can also share a link that others can use. Get summary of each conversation, mood of the users and identify users to generate leads.
 
-text to SQL
+Text to SQL: Analyze & Manage accounting data with Powerful AI. AI-powered SaaS application designed to revolutionize the way you manage and analyze your accounting data.  AI empowers businesses by providing accurate, timely, and insightful financial analysis.
 
-Learn English GPT
+Learn English GPT: This is a fun and effective way to learn English in Chinese. Learning with AI is fun, and research shows that it works! With quick, itractive lessons, you’ll earn points and unlock new levels while gaining real-world communication skills.
 
-SearchLLM
+SearchLLM: Getting answers on the web can take a lot of effort, often requiring multiple attempts to get relevant results. This product solve that by enhancing the conversational capabilities of our models with real-time information from the web, finding what you’re looking for can be faster and easier. SearchLLM will quickly and directly respond to your questions with up-to-date information from the web while giving you clear links to relevant sources.
 
-quizeLLM
+QuizeLLM: This AI app generate questions as expert in academic quizzes, formal yet approachable.
 
-TwitterLLM
+Twitter AI: Engage with tweets (reply and like) automatically to increase reach.
 
-Legal Chatbot
+Legal Chatbot: A legal chatbot is a cutting-edge platform that enables law research globally in any language. It simplifies documents for easy comprehension.
 
-TuneBot
+TuneBot: Talk to AI about songs, lyrics, singer and albums to know more about your favorite songs.
 
-Social Media
+Social Media: Full stack social media app for posts like Instagram.
 
-Taxi chatbot
+Taxi chatbot: Cyndi AI chatbot to help passenger and driver on FAQs. Passenger and driver can report lost and found items and can track those items as well.
 
 Thanks
 
